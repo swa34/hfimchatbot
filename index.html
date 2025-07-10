@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive LLM API Cost Analysis</title>
+    <!-- Chosen Palette: Modern Slate & Teal -->
+    <!-- Application Structure Plan: The SPA is designed as a top-down decision-making journey. It starts with a high-level executive summary and key metrics. It then guides the user through the project's practical aspects: the development timeline, team structure, and the critical operational cost factor, which is presented as an interactive calculator. This is followed by the core strategic decision (RAG vs. Fine-Tuning), visualized for easy comparison. The journey concludes with a comprehensive first-year budget summary and final recommendations. This thematic flow transforms the static report into a dynamic tool that aligns with a manager's or stakeholder's evaluation process, prioritizing clarity and interactive exploration over the original report's linear structure. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Key Financials & Recommendations -> Goal: Inform -> Viz: Key metric cards (HTML/CSS) -> Interaction: None, for immediate clarity -> Justification: Provides the most critical info upfront.
+        - Report Info: Development Lifecycle -> Goal: Organize -> Viz: Interactive timeline (HTML/CSS/JS) -> Interaction: Click phase to expand details -> Justification: More engaging and less dense than a table.
+        - Report Info: Team Roles -> Goal: Inform -> Viz: Grid of role cards (HTML/CSS) -> Interaction: Hover for subtle effect -> Justification: Visually breaks down the team structure.
+        - Report Info: API Cost Projections -> Goal: Explore/Compare -> Viz: Interactive calculator with sliders and a dynamic bar chart -> Interaction: User adjusts sliders/dropdowns to see real-time cost changes -> Justification: The core interactive element, making abstract data tangible and personalized. Library: Chart.js.
+        - Report Info: Customization Strategies (RAG vs. Fine-Tuning) -> Goal: Compare -> Viz: Side-by-side comparison with icons (HTML/CSS) -> Interaction: None, direct comparison -> Justification: Clearly presents the two choices and reinforces the report's recommendation.
+        - Report Info: First-Year Budget -> Goal: Summarize -> Viz: Donut chart -> Interaction: Hover tooltips -> Justification: Provides a simple, clear visual breakdown of the total investment. Library: Chart.js.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            /* slate-50 */
+            color: #1e293b;
+            /* slate-800 */
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+            }
+        }
+
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+
+        .nav-link.active,
+        .nav-link:hover {
+            color: #0d9488;
+            /* teal-600 */
+        }
+
+        .phase-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            padding: 0 1.5rem;
+        }
+
+        .phase-content.open {
+            max-height: 500px;
+            padding: 1.5rem 1.5rem;
+        }
+
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #0d9488;
+            /* teal-600 */
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .slider-thumb::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #0d9488;
+            /* teal-600 */
+            cursor: pointer;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-teal-700">LLM Cost Analyzer</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#summary"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Summary</a>
+                        <a href="#roadmap"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Roadmap</a>
+                        <a href="#costs" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Cost
+                            Engine</a>
+                        <a href="#strategy"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Strategy</a>
+                        <a href="#budget"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Budget</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <section id="summary" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Strategic & Financial Analysis
+                </h2>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">An interactive guide to the costs and
+                    strategy for implementing an LLM-powered chatbot for student engagement.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <dt class="text-sm font-medium text-slate-500">Core Recommendation</dt>
+                    <dd class="mt-1 text-2xl font-semibold tracking-tight text-teal-600">Pilot with GPT-4o-mini & RAG
+                    </dd>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <dt class="text-sm font-medium text-slate-500">Total Development Effort</dt>
+                    <dd class="mt-1 text-2xl font-semibold tracking-tight text-slate-900">~410+ Man-Hours</dd>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <dt class="text-sm font-medium text-slate-500">Est. Monthly API Cost (Moderate)</dt>
+                    <dd class="mt-1 text-2xl font-semibold tracking-tight text-slate-900">~$6.00</dd>
+                </div>
+            </div>
+            <div class="mt-8 bg-teal-50 border-l-4 border-teal-500 text-teal-800 p-6 rounded-lg shadow-sm">
+                <h3 class="font-bold mb-2">Executive Summary</h3>
+                <p class="text-sm md:text-base">This analysis confirms the financial viability of launching an LLM
+                    chatbot. Recent market shifts have made powerful models incredibly affordable, reducing projected
+                    operational costs by over 90%. The recommended "start smart, scale smart" approach leverages a
+                    commercial API and a Retrieval-Augmented Generation (RAG) architecture. This strategy maximizes
+                    accuracy and minimizes costs, making the project a low-risk, high-impact strategic investment in
+                    student engagement.</p>
+            </div>
+        </section>
+
+        <section id="roadmap" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Project Roadmap & Team</h2>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">The project is not about building an
+                    LLM, but integrating one. Below is the phase-by-phase development lifecycle and the lean team
+                    required to execute it.</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8 mb-12">
+                <h3 class="text-xl font-bold text-center mb-8">Development Lifecycle (~410+ Hours)</h3>
+                <div id="timeline-container" class="space-y-4">
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <h3 class="text-xl font-bold text-center mb-8">Required Team Composition (3-5 Specialists)</h3>
+                <div id="team-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                </div>
+            </div>
+        </section>
+
+        <section id="costs" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">The Cost Engine</h2>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Operational API costs are the primary
+                    recurring expense. Use this interactive calculator to explore how different models and usage
+                    scenarios impact your monthly budget. The results are based on the latest market pricing.</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-1 space-y-6">
+                        <div>
+                            <label for="model-select" class="block text-sm font-medium text-slate-700">Select LLM
+                                Model</label>
+                            <select id="model-select"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md">
+                            </select>
+                        </div>
+                        <div>
+                            <label for="visitor-slider" class="block text-sm font-medium text-slate-700">Daily Website
+                                Visits: <span id="visitor-value" class="font-bold text-teal-600">500</span></label>
+                            <input id="visitor-slider" type="range" min="100" max="5000" value="500" step="100"
+                                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        </div>
+                        <div>
+                            <label for="engagement-slider" class="block text-sm font-medium text-slate-700">Chatbot
+                                Engagement Rate: <span id="engagement-value"
+                                    class="font-bold text-teal-600">40%</span></label>
+                            <input id="engagement-slider" type="range" min="5" max="100" value="40" step="5"
+                                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg text-center">
+                            <p class="text-sm text-slate-600">Projected Monthly API Cost</p>
+                            <p id="monthly-cost" class="text-4xl font-bold text-slate-800">$6.00</p>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-2">
+                        <div class="chart-container">
+                            <canvas id="cost-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="strategy" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">The Core Strategic Decision
+                </h2>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">To ensure accuracy and relevance, the
+                    LLM needs your institution's specific knowledge. The choice between RAG and Fine-Tuning is critical
+                    for cost, accuracy, and long-term agility.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white border-2 border-teal-500 rounded-xl shadow-lg p-6">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4">Retrieval-Augmented Generation (RAG)</h3>
+                    <p class="text-sm text-teal-600 font-semibold mb-4">RECOMMENDED STRATEGY</p>
+                    <p class="mb-6 text-slate-600">Provides the LLM with relevant information "just-in-time" from your
+                        knowledge base to answer questions. It doesn't retrain the model, it informs it.</p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-green-500 text-2xl mr-3">✓</span>
+                            <div><strong class="text-slate-800">High Accuracy:</strong> Responses are grounded in your
+                                official documents, minimizing factual errors or "hallucinations."</div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 text-2xl mr-3">✓</span>
+                            <div><strong class="text-slate-800">Cost-Effective:</strong> Avoids expensive training runs.
+                                You only pay for standard API calls.</div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 text-2xl mr-3">✓</span>
+                            <div><strong class="text-slate-800">Agile & Maintainable:</strong> Updating the chatbot's
+                                knowledge is as simple as editing a source document. Fast, easy, and free.</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-xl shadow-md p-6 opacity-70">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4">Model Fine-Tuning</h3>
+                    <p class="text-sm text-amber-600 font-semibold mb-4">HIGHER COST & COMPLEXITY</p>
+                    <p class="mb-6 text-slate-600">Permanently retrains the base LLM on a custom dataset of your
+                        institution's Q&A pairs, creating a specialized model variant.</p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-red-500 text-2xl mr-3">✗</span>
+                            <div><strong class="text-slate-800">High Upfront Cost:</strong> Requires extensive data
+                                preparation and expensive computational training runs (thousands of dollars).</div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-red-500 text-2xl mr-3">✗</span>
+                            <div><strong class="text-slate-800">Higher Operational Cost:</strong> API calls to
+                                custom-tuned models are more expensive than base models.</div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-red-500 text-2xl mr-3">✗</span>
+                            <div><strong class="text-slate-800">Slow to Update:</strong> The model is a static snapshot.
+                                Updating it requires repeating the entire costly and slow fine-tuning process.</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="budget" class="scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">First-Year Budget Outlook</h2>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">This summary consolidates the total
+                    estimated investment for the first year, combining one-time development with recurring operational
+                    costs.</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">Cost Component Breakdown</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="dev-rate-input" class="block text-sm font-medium text-slate-700">Blended
+                                    Hourly Rate for Development ($)</label>
+                                <input type="number" id="dev-rate-input" value="75"
+                                    class="mt-1 block w-full max-w-xs pl-3 pr-3 py-2 text-base border-slate-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md">
+                            </div>
+                            <dl class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <dt class="text-slate-600">One-Time Dev Cost (~410 hrs)</dt>
+                                    <dd id="dev-cost-total" class="font-semibold text-slate-900">$30,750</dd>
+                                </div>
+                                <div class="flex justify-between">
+                                    <dt class="text-slate-600">Annual API Cost (Moderate Usage)</dt>
+                                    <dd id="api-cost-annual" class="font-semibold text-slate-900">~$72</dd>
+                                </div>
+                                <div class="flex justify-between">
+                                    <dt class="text-slate-600">Annual Infrastructure (Hosting, etc.)</dt>
+                                    <dd class="font-semibold text-slate-900">~$900 (Est.)</dd>
+                                </div>
+                                <div class="flex justify-between border-t pt-2 mt-2">
+                                    <dt class="text-base font-bold text-slate-900">Total Estimated First-Year Cost</dt>
+                                    <dd id="total-cost-first-year" class="text-base font-bold text-teal-600">$31,722
+                                    </dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="chart-container h-64 md:h-80">
+                        <canvas id="budget-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const timelineData = [
+                { phase: 1, title: 'Planning & Architecture', hours: 100, content: 'Defining the technical blueprint, selecting the technology stack, and designing the system architecture for security, scalability, and maintainability.' },
+                { phase: 2, title: 'Conversation Design & UX', hours: 100, content: 'Crafting the user experience, defining the chatbot’s persona and tone, and mapping conversational flows to ensure natural, helpful interactions.' },
+                { phase: 3, title: 'API & Integration Dev', hours: 50, content: 'Core back-end engineering to manage interactions with the LLM provider, handle API keys, and build the RAG retrieval pipeline.' },
+                { phase: 4, title: 'Testing & Quality Assurance', hours: 30, content: 'Rigorous unit, integration, and user acceptance testing to ensure reliability, accuracy, and a high-quality user experience.' },
+                { phase: 5, title: 'Deployment & Scaling', hours: 30, content: 'Moving the application to a live production environment on a cloud provider, configured for high availability and robust monitoring.' },
+                { phase: 6, title: 'Multi-Channel Integration', hours: 50, content: 'Integrating the chatbot into user-facing channels, primarily a widget on the institution’s website, ensuring seamless cross-browser functionality.' },
+            ];
+
+            const teamData = [
+                { role: 'Lead AI/ML Engineer', icon: '🧠', description: 'Provides technical leadership on LLM selection, prompt strategy, and RAG architecture.' },
+                { role: 'Back-End Developer', icon: '⚙️', description: 'Builds the server-side logic, API integrations, and database connections.' },
+                { role: 'Front-End Developer', icon: '🎨', description: 'Builds the interactive chat interface and connects it to the back-end application.' },
+                { role: 'Business Analyst', icon: '📈', description: 'Curates the knowledge base, defines use cases, and validates response accuracy.' },
+                { role: 'QA Tester', icon: '🧪', description: 'Executes systematic test plans to identify bugs and verify functionality.' },
+            ];
+
+            const models = {
+                'gpt-4o-mini': { name: 'OpenAI GPT-4o-mini', input: 0.15, output: 0.60 },
+                'gemini-1.5-flash': { name: 'Google Gemini 1.5 Flash', input: 0.075, output: 0.30 },
+                'claude-3.5-sonnet': { name: 'Anthropic Claude 3.5 Sonnet', input: 3.00, output: 15.00 },
+            };
+
+            const timelineContainer = document.getElementById('timeline-container');
+            timelineData.forEach(item => {
+                const phaseElement = document.createElement('div');
+                phaseElement.innerHTML = `
+                    <button class="phase-header w-full flex justify-between items-center text-left p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition duration-200">
+                        <span class="font-semibold text-slate-800">${item.phase}. ${item.title}</span>
+                        <span class="text-sm font-medium text-teal-600">${item.hours} hrs</span>
+                    </button>
+                    <div class="phase-content bg-white text-slate-600 text-sm">
+                        ${item.content}
+                    </div>`;
+                timelineContainer.appendChild(phaseElement);
+            });
+
+            timelineContainer.addEventListener('click', (e) => {
+                const header = e.target.closest('.phase-header');
+                if (header) {
+                    const content = header.nextElementSibling;
+                    content.classList.toggle('open');
+                }
+            });
+
+            const teamContainer = document.getElementById('team-container');
+            teamData.forEach(member => {
+                const card = document.createElement('div');
+                card.className = 'bg-slate-50 p-4 rounded-lg text-center transform hover:-translate-y-1 transition-transform duration-300';
+                card.innerHTML = `
+                    <div class="text-4xl mb-2">${member.icon}</div>
+                    <h4 class="font-semibold text-slate-800">${member.role}</h4>
+                    <p class="text-xs text-slate-500 mt-1">${member.description}</p>`;
+                teamContainer.appendChild(card);
+            });
+
+            const modelSelect = document.getElementById('model-select');
+            Object.keys(models).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = models[key].name;
+                if (key === 'gpt-4o-mini') option.selected = true;
+                modelSelect.appendChild(option);
+            });
+
+            const visitorSlider = document.getElementById('visitor-slider');
+            const engagementSlider = document.getElementById('engagement-slider');
+            const visitorValue = document.getElementById('visitor-value');
+            const engagementValue = document.getElementById('engagement-value');
+            const monthlyCost = document.getElementById('monthly-cost');
+            const devRateInput = document.getElementById('dev-rate-input');
+            const devCostTotal = document.getElementById('dev-cost-total');
+            const apiCostAnnual = document.getElementById('api-cost-annual');
+            const totalCostFirstYear = document.getElementById('total-cost-first-year');
+
+            const costChartCtx = document.getElementById('cost-chart').getContext('2d');
+            let costChart = new Chart(costChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Projected Monthly Cost ($)',
+                        data: [],
+                        backgroundColor: '#0d9488',
+                        borderColor: '#047857',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, title: { display: true, text: 'Cost in USD ($)' } } },
+                    plugins: {
+                        legend: { display: false }, tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const budgetChartCtx = document.getElementById('budget-chart').getContext('2d');
+            let budgetChart = new Chart(budgetChartCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Development', 'API Usage', 'Infrastructure'],
+                    datasets: [{
+                        data: [30750, 72, 900],
+                        backgroundColor: ['#0f766e', '#14b8a6', '#99f6e4'],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            function calculateCosts() {
+                const selectedModelKey = modelSelect.value;
+                const model = models[selectedModelKey];
+                const dailyVisits = parseInt(visitorSlider.value);
+                const engagementRate = parseInt(engagementSlider.value) / 100;
+
+                const dailyQueries = dailyVisits * engagementRate;
+                const tokensPerQuery = 2000;
+                const monthlyTokens = dailyQueries * tokensPerQuery * 30;
+
+                const inputTokenRatio = 0.25;
+                const outputTokenRatio = 0.75;
+
+                const monthlyInputTokens = monthlyTokens * inputTokenRatio / 1000000;
+                const monthlyOutputTokens = monthlyTokens * outputTokenRatio / 1000000;
+
+                const cost = (monthlyInputTokens * model.input) + (monthlyOutputTokens * model.output);
+
+                monthlyCost.textContent = `$${cost.toFixed(2)}`;
+                apiCostAnnual.textContent = `~$${(cost * 12).toFixed(0)}`;
+
+                updateCostChart(dailyVisits, engagementRate);
+                updateBudget();
+            }
+
+            function updateCostChart(dailyVisits, engagementRate) {
+                const labels = [];
+                const data = [];
+                Object.values(models).forEach(model => {
+                    const dailyQueries = dailyVisits * engagementRate;
+                    const monthlyTokens = dailyQueries * 2000 * 30;
+                    const cost = ((monthlyTokens * 0.25 / 1000000) * model.input) + ((monthlyTokens * 0.75 / 1000000) * model.output);
+                    labels.push(model.name.split(' ').slice(1).join(' '));
+                    data.push(cost);
+                });
+
+                costChart.data.labels = labels;
+                costChart.data.datasets[0].data = data;
+                costChart.update();
+            }
+
+            function updateBudget() {
+                const devRate = parseFloat(devRateInput.value) || 0;
+                const devCost = 410 * devRate;
+                const apiCost = parseFloat(apiCostAnnual.textContent.replace(/[^0-9.-]+/g, ""));
+                const infraCost = 900;
+                const totalCost = devCost + apiCost + infraCost;
+
+                devCostTotal.textContent = `$${devCost.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+                totalCostFirstYear.textContent = `$${totalCost.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+
+                budgetChart.data.datasets[0].data = [devCost, apiCost, infraCost];
+                budgetChart.update();
+            }
+
+            visitorSlider.addEventListener('input', () => {
+                visitorValue.textContent = visitorSlider.value;
+                calculateCosts();
+            });
+
+            engagementSlider.addEventListener('input', () => {
+                engagementValue.textContent = `${engagementSlider.value}%`;
+                calculateCosts();
+            });
+
+            modelSelect.addEventListener('change', calculateCosts);
+            devRateInput.addEventListener('input', updateBudget);
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 80) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+
+            calculateCosts();
+        });
+    </script>
+</body>
+
+</html>
