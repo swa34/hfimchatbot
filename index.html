@@ -1,31 +1,18 @@
-<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive LLM API Cost Analysis</title>
-    <!-- Chosen Palette: Modern Slate & Teal -->
-    <!-- Application Structure Plan: The SPA is designed as a top-down decision-making journey. It starts with a high-level executive summary and key metrics. It then guides the user through the project's practical aspects: the development timeline, team structure, and the critical operational cost factor, which is presented as an interactive calculator. This is followed by the core strategic decision (RAG vs. Fine-Tuning), and the practical implementation plan (Integration Strategy). The journey concludes with a comprehensive first-year budget summary. This thematic flow transforms the static report into a dynamic tool that aligns with a manager's or stakeholder's evaluation process. -->
-    <!-- Visualization & Content Choices: 
-        - Report Info: Key Financials & Recommendations -> Goal: Inform -> Viz: Key metric cards (HTML/CSS) -> Interaction: None, for immediate clarity.
-        - Report Info: Development Lifecycle -> Goal: Organize -> Viz: Interactive timeline (HTML/CSS/JS) -> Interaction: Click phase to expand details.
-        - Report Info: Team Roles -> Goal: Inform -> Viz: Grid of role cards (HTML/CSS) -> Interaction: Hover for subtle effect.
-        - Report Info: API Cost Projections -> Goal: Explore/Compare -> Viz: Interactive calculator with sliders and a dynamic bar chart -> Interaction: User adjusts sliders/dropdowns to see real-time cost changes. Library: Chart.js.
-        - Report Info: Customization Strategies (RAG vs. Fine-Tuning) -> Goal: Compare -> Viz: Side-by-side comparison with icons (HTML/CSS).
-        - Report Info: Integration Strategy -> Goal: Organize/Inform -> Viz: Diagram (styled <pre> block) and step-by-step cards (HTML/CSS) -> Justification: Clearly visualizes the decoupled architecture and implementation steps for AEM/WordPress.
-        - Report Info: First-Year Budget -> Goal: Summarize -> Viz: Donut chart -> Interaction: Hover tooltips. Library: Chart.js.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <script src="[https://cdn.jsdelivr.net/npm/chart.js](https://cdn.jsdelivr.net/npm/chart.js)"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('[https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap)');
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
             color: #1e293b;
         }
-        .chart-container {
+       .chart-container {
             position: relative;
             width: 100%;
             max-width: 800px;
@@ -34,27 +21,27 @@
             height: 350px;
         }
         @media (min-width: 768px) {
-            .chart-container {
+           .chart-container {
                 height: 450px;
             }
         }
-        .nav-link {
+       .nav-link {
             transition: color 0.3s ease;
         }
-        .nav-link.active, .nav-link:hover {
+       .nav-link.active,.nav-link:hover {
             color: #0d9488;
         }
-        .phase-content {
+       .phase-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
             padding: 0 1.5rem;
         }
-        .phase-content.open {
+       .phase-content.open {
             max-height: 500px; 
             padding: 1.5rem 1.5rem;
         }
-        .slider-thumb::-webkit-slider-thumb {
+       .slider-thumb::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
             width: 20px;
@@ -63,14 +50,14 @@
             cursor: pointer;
             border-radius: 50%;
         }
-        .slider-thumb::-moz-range-thumb {
+       .slider-thumb::-moz-range-thumb {
             width: 20px;
             height: 20px;
             background: #0d9488;
             cursor: pointer;
             border-radius: 50%;
         }
-        .code-block {
+       .code-block {
             background-color: #1e293b;
             color: #e2e8f0;
             padding: 1rem;
@@ -78,6 +65,24 @@
             font-family: monospace;
             font-size: 0.875rem;
             overflow-x: auto;
+        }
+        /* Custom table styles */
+       .custom-table {
+            min-width: 100%;
+            border-collapse: collapse;
+        }
+       .custom-table th,.custom-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+       .custom-table th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+        }
+       .custom-table tbody tr:hover {
+            background-color: #f1f5f9;
         }
     </style>
 </head>
@@ -94,6 +99,7 @@
                         <a href="#summary" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Summary</a>
                         <a href="#roadmap" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Roadmap</a>
                         <a href="#costs" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Cost Engine</a>
+                        <a href="#database-analysis" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Database Costs</a>
                         <a href="#strategy" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Strategy</a>
                         <a href="#integration" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Integration</a>
                         <a href="#budget" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Budget</a>
@@ -186,6 +192,153 @@
             </div>
         </section>
         
+        <section id="database-analysis" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Vector Database Cost Analysis</h2>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">A deep dive into the infrastructure costs for the RAG architecture's most critical component, replacing high-level estimates with a robust, evidence-based forecast.</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8 space-y-12">
+                
+                <div>
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-4">A Framework for Understanding Vector Database Pricing</h3>
+                    <p class="text-slate-600 mb-6">The market for managed vector database services is dominated by two distinct pricing philosophies. Understanding these models is essential for aligning the technology choice with the financial realities of a pilot project.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-6 rounded-lg">
+                            <h4 class="text-lg font-bold text-slate-900 mb-2">Provisioned Capacity Models</h4>
+                            <p class="text-slate-600 text-sm">This model requires paying a fixed hourly or monthly rate for dedicated resources (e.g., Azure AI Search, Vertex AI Vector Search). Costs are predictable but constant, regardless of usage. This is financially inefficient for pilot projects with intermittent or low usage, creating a significant barrier to entry.</p>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-lg">
+                            <h4 class="text-lg font-bold text-slate-900 mb-2">Usage-Based ("Serverless") Models</h4>
+                            <p class="text-slate-600 text-sm">This model aligns costs directly with consumption, billing for data stored, written, and read (e.g., Pinecone, Qdrant, Weaviate). It offers an exceptionally low cost to start, making it ideal for pilots by minimizing upfront financial commitment and risk. Costs scale transparently with usage.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-4">Comparative Analysis of Leading Services</h3>
+                    <p class="text-slate-600 mb-6">A head-to-head comparison reveals significant differences in pricing structures and suitability for the pilot project. The following table provides a summary of key differentiators.</p>
+                    <div class="overflow-x-auto rounded-lg border border-slate-200">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Provider</th>
+                                    <th>Core Pricing Model</th>
+                                    <th>Key Cost Drivers</th>
+                                    <th>Free Tier / Pilot Offering</th>
+                                    <th>Minimum Monthly Production Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr>
+                                    <td class="font-semibold text-slate-800">Pinecone</td>
+                                    <td>Usage-Based with Minimum</td>
+                                    <td>Storage (GB/mo), Read/Write Units</td>
+                                    <td>Limited "Starter" plan for non-production use</td>
+                                    <td class="font-semibold">$50</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold text-slate-800">Qdrant</td>
+                                    <td>Usage-Based / Provisioned</td>
+                                    <td>Provisioned Cluster Size (CPU/RAM)</td>
+                                    <td class="text-teal-600 font-semibold">1 GB "Free Forever" Cluster</td>
+                                    <td class="text-teal-600 font-semibold">$0 (within free tier)</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold text-slate-800">Weaviate</td>
+                                    <td>Usage-Based with Minimum</td>
+                                    <td>Vector Dimensions Stored</td>
+                                    <td>Free sandbox for prototyping</td>
+                                    <td class="font-semibold">$25</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold text-slate-800">Azure AI Search</td>
+                                    <td>Provisioned Capacity</td>
+                                    <td>Fixed Tiered Rate (Search Units)</td>
+                                    <td>Limited 50 MB free tier</td>
+                                    <td class="font-semibold">~$74 (Basic Tier)</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold text-slate-800">Vertex AI Vector Search</td>
+                                    <td>Provisioned Capacity</td>
+                                    <td>Fixed Node Rate (VM uptime), Build Cost</td>
+                                    <td>New customer credits ($300-$1000)</td>
+                                    <td class="font-semibold">~$68 (Smallest Node)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-4">Financial Modeling & Projections</h3>
+                    <p class="text-slate-600 mb-6">Based on a projected knowledge base size of ~20.5 MB (well within free tier limits) and varying query volumes, we can project the first-year costs for each provider.</p>
+                    <div class="overflow-x-auto rounded-lg border border-slate-200">
+                        <table class="custom-table">
+                             <thead>
+                                <tr>
+                                    <th>Provider</th>
+                                    <th>Low Usage (Annual)</th>
+                                    <th>Moderate Usage (Annual)</th>
+                                    <th>High Usage (Annual)</th>
+                                    <th>Key Cost Justification</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr>
+                                    <td class="font-semibold text-slate-800">Pinecone</td>
+                                    <td>$600</td>
+                                    <td>$600</td>
+                                    <td>$600</td>
+                                    <td>Cost is determined by the $50/month minimum commitment.</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold text-slate-800">Qdrant</td>
+                                    <td class="text-teal-600 font-semibold">$0</td>
+                                    <td class="text-teal-600 font-semibold">$0</td>
+                                    <td class="text-teal-600 font-semibold">$0</td>
+                                    <td class="text-teal-600">Projected index size fits within the 1 GB "Free Forever" tier.</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold text-slate-800">Weaviate</td>
+                                    <td>$300</td>
+                                    <td>$300</td>
+                                    <td>$300</td>
+                                    <td>Cost is determined by the $25/month minimum commitment.</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold text-slate-800">Azure AI Search</td>
+                                    <td>~$885</td>
+                                    <td>~$885</td>
+                                    <td>~$885</td>
+                                    <td>Cost is the fixed rate for the provisioned "Basic" tier.</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold text-slate-800">Vertex AI Vector Search</td>
+                                    <td>~$816</td>
+                                    <td>~$816</td>
+                                    <td>~$816</td>
+                                    <td>Cost is the fixed rate for the smallest provisioned node.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-4">Strategic Recommendation</h3>
+                     <div class="bg-teal-50 border-l-4 border-teal-500 text-teal-800 p-6 rounded-lg shadow-sm">
+                        <h4 class="font-bold mb-2">Primary Recommendation: Select Qdrant's Managed Cloud</h4>
+                        <p class="text-sm md:text-base">This recommendation is driven by an overwhelming financial advantage. The availability of a generous 1 GB "Free Forever" tier effectively eliminates the vector database infrastructure cost for the entire pilot phase. This represents a direct, tangible saving of $300 to $885+ per year compared to all other viable alternatives, maximally aligning with the project's "start smart, scale smart" principle by removing a key fixed cost during a period of uncertain usage.</p>
+                    </div>
+                    <div class="mt-6">
+                        <h4 class="text-lg font-bold text-slate-900 mb-2">Contingency and Scaling Strategy</h4>
+                        <p class="text-slate-600 text-sm">Should Qdrant prove unsuitable, Weaviate is the next most cost-effective option at $300 annually. A formal re-evaluation of the provider should be triggered if the knowledge base exceeds 1 GB. At a much larger scale, a new analysis should evaluate migrating to a provisioned service like Azure or Vertex AI, or exploring a self-hosted open-source solution.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
         <section id="strategy" class="mb-16 scroll-mt-24">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">The Core Strategic Decision</h2>
@@ -245,17 +398,19 @@
                 <div class="code-block text-center text-sm leading-6">
 <pre>
   USER'S BROWSER
-       |
-+------------------+      +--------------------------------+
-| AEM/WordPress    |      | YOUR STANDALONE CHATBOT SVC    |
-| (Chat Widget UI) |----->| (Hosted on AWS, Azure, etc.)   |
-+------------------+      +--------------------------------+
-     AJAX Request                 |                 |
-                                  V                 V
-                           +----------------+   +------------------+
-                           | RAG System /   |   | External LLM API |
-                           | Vector DB      |   | (OpenAI, Google) |
-                           +----------------+   +------------------+
+|
++------------------+     +--------------------------------+
+
+| AEM/WordPress | | YOUR STANDALONE CHATBOT SVC |
+| (Chat Widget UI) |----->| (Hosted on AWS, Azure, etc.) |
++------------------+     +--------------------------------+
+    AJAX Request | |
+                               V                   V
+                       +----------------+   +------------------+
+
+| RAG System / | | External LLM API |
+| Vector DB | | (OpenAI, Google) |
+                       +----------------+   +------------------+
 </pre>
                 </div>
                 <div class="mt-12">
@@ -270,7 +425,7 @@
                             <p class="text-slate-600 text-sm mb-4">Create a simple AEM component that adds the following two lines to your page templates, loading the widget.</p>
                             <div class="code-block">
 &lt;div id="chatbot-root"&gt;&lt;/div&gt;
-&lt;script src="https://your-cdn.com/chatbot-widget.js"&gt;&lt;/script&gt;
+&lt;script src="[https://your-cdn.com/chatbot-widget.js](https://your-cdn.com/chatbot-widget.js)"&gt;&lt;/script&gt;
                             </div>
                         </div>
                         <div class="md:col-span-2">
@@ -285,7 +440,7 @@
         <section id="budget" class="scroll-mt-24">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">First-Year Budget Outlook</h2>
-                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">This summary consolidates the total estimated investment for the first year, combining one-time development with recurring operational costs.</p>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">This summary consolidates the total estimated investment for the first year, combining one-time development with recurring operational costs, updated with the latest infrastructure analysis.</p>
             </div>
             <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -293,9 +448,9 @@
                         <h3 class="text-xl font-bold mb-4">Cost Component Breakdown</h3>
                         <div class="space-y-4">
                              <div>
-                                <label for="dev-rate-input" class="block text-sm font-medium text-slate-700">Blended Hourly Rate for Development ($)</label>
-                                <input type="number" id="dev-rate-input" value="75" class="mt-1 block w-full max-w-xs pl-3 pr-3 py-2 text-base border-slate-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md">
-                            </div>
+                                 <label for="dev-rate-input" class="block text-sm font-medium text-slate-700">Blended Hourly Rate for Development ($)</label>
+                                 <input type="number" id="dev-rate-input" value="75" class="mt-1 block w-full max-w-xs pl-3 pr-3 py-2 text-base border-slate-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md">
+                             </div>
                             <dl class="space-y-2 text-sm">
                                 <div class="flex justify-between">
                                     <dt class="text-slate-600">One-Time Dev Cost (~410 hrs)</dt>
@@ -306,12 +461,12 @@
                                     <dd id="api-cost-annual" class="font-semibold text-slate-900">~$72</dd>
                                 </div>
                                 <div class="flex justify-between">
-                                    <dt class="text-slate-600">Annual Infrastructure (Hosting, etc.)</dt>
-                                    <dd class="font-semibold text-slate-900">~$900 (Est.)</dd>
+                                    <dt class="text-slate-600">Annual Infrastructure (DB + Hosting)</dt>
+                                    <dd id="infra-cost-annual" class="font-semibold text-slate-900">~$450 (Est.)</dd>
                                 </div>
                                 <div class="flex justify-between border-t pt-2 mt-2">
                                     <dt class="text-base font-bold text-slate-900">Total Estimated First-Year Cost</dt>
-                                    <dd id="total-cost-first-year" class="text-base font-bold text-teal-600">$31,722</dd>
+                                    <dd id="total-cost-first-year" class="text-base font-bold text-teal-600">$31,272</dd>
                                 </div>
                             </dl>
                         </div>
@@ -328,22 +483,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            const timelineData = [
-                { phase: 1, title: 'Planning & Architecture', hours: 100, content: 'Defining the technical blueprint, selecting the technology stack, and designing the system architecture for security, scalability, and maintainability.' },
-                { phase: 2, title: 'Conversation Design & UX', hours: 100, content: 'Crafting the user experience, defining the chatbot’s persona and tone, and mapping conversational flows to ensure natural, helpful interactions.' },
-                { phase: 3, title: 'API & Integration Dev', hours: 50, content: 'Core back-end engineering to manage interactions with the LLM provider, handle API keys, and build the RAG retrieval pipeline.' },
-                { phase: 4, title: 'Testing & Quality Assurance', hours: 30, content: 'Rigorous unit, integration, and user acceptance testing to ensure reliability, accuracy, and a high-quality user experience.' },
-                { phase: 5, title: 'Deployment & Scaling', hours: 30, content: 'Moving the application to a live production environment on a cloud provider, configured for high availability and robust monitoring.' },
-                { phase: 6, title: 'Multi-Channel Integration', hours: 50, content: 'Integrating the chatbot into user-facing channels, primarily a widget on the institution’s website, ensuring seamless cross-browser functionality.' },
-            ];
+            const timelineData =;
 
-            const teamData = [
-                { role: 'Lead AI/ML Engineer', icon: '🧠', description: 'Provides technical leadership on LLM selection, prompt strategy, and RAG architecture.' },
-                { role: 'Back-End Developer', icon: '⚙️', description: 'Builds the server-side logic, API integrations, and database connections.' },
-                { role: 'Front-End Developer', icon: '🎨', description: 'Builds the interactive chat interface and connects it to the back-end application.' },
-                { role: 'Business Analyst', icon: '📈', description: 'Curates the knowledge base, defines use cases, and validates response accuracy.' },
-                { role: 'QA Tester', icon: '🧪', description: 'Executes systematic test plans to identify bugs and verify functionality.' },
-            ];
+            const teamData =;
 
             const models = {
                 'gpt-4o-mini': { name: 'OpenAI GPT-4o-mini', input: 0.15, output: 0.60 },
@@ -401,16 +543,17 @@
             const devRateInput = document.getElementById('dev-rate-input');
             const devCostTotal = document.getElementById('dev-cost-total');
             const apiCostAnnual = document.getElementById('api-cost-annual');
+            const infraCostAnnual = document.getElementById('infra-cost-annual');
             const totalCostFirstYear = document.getElementById('total-cost-first-year');
 
             const costChartCtx = document.getElementById('cost-chart').getContext('2d');
             let costChart = new Chart(costChartCtx, {
                 type: 'bar',
                 data: {
-                    labels: [],
+                    labels:,
                     datasets: [{
                         label: 'Projected Monthly Cost ($)',
-                        data: [],
+                        data:,
                         backgroundColor: '#0d9488',
                         borderColor: '#047857',
                         borderWidth: 1
@@ -423,9 +566,11 @@
                     plugins: { legend: { display: false }, tooltip: {
                         callbacks: {
                             label: function(context) {
-                                let label = context.dataset.label || '';
+                                let label = context.dataset.label |
+
+| '';
                                 if (label) { label += ': '; }
-                                if (context.parsed.y !== null) {
+                                if (context.parsed.y!== null) {
                                     label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
                                 }
                                 return label;
@@ -439,9 +584,9 @@
             let budgetChart = new Chart(budgetChartCtx, {
                  type: 'doughnut',
                 data: {
-                    labels: ['Development', 'API Usage', 'Infrastructure'],
+                    labels:,
                     datasets: [{
-                        data: [30750, 72, 900],
+                        data: ,
                         backgroundColor: ['#0f766e', '#14b8a6', '#99f6e4'],
                         hoverOffset: 4
                     }]
@@ -454,9 +599,11 @@
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    let label = context.label || '';
+                                    let label = context.label |
+
+| '';
                                     if (label) { label += ': '; }
-                                    if (context.parsed !== null) {
+                                    if (context.parsed!== null) {
                                         label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
                                     }
                                     return label;
@@ -493,8 +640,8 @@
             }
 
             function updateCostChart(dailyVisits, engagementRate) {
-                const labels = [];
-                const data = [];
+                const labels =;
+                const data =;
                 Object.values(models).forEach(model => {
                     const dailyQueries = dailyVisits * engagementRate;
                     const monthlyTokens = dailyQueries * 2000 * 30;
@@ -504,21 +651,24 @@
                 });
                 
                 costChart.data.labels = labels;
-                costChart.data.datasets[0].data = data;
+                costChart.data.datasets.data = data;
                 costChart.update();
             }
 
             function updateBudget() {
-                const devRate = parseFloat(devRateInput.value) || 0;
+                const devRate = parseFloat(devRateInput.value) |
+
+| 0;
                 const devCost = 410 * devRate;
                 const apiCost = parseFloat(apiCostAnnual.textContent.replace(/[^0-9.-]+/g,""));
-                const infraCost = 900;
+                const infraCost = 450; // Updated based on new analysis
                 const totalCost = devCost + apiCost + infraCost;
 
                 devCostTotal.textContent = `$${devCost.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+                infraCostAnnual.textContent = `~$${infraCost} (Est.)`;
                 totalCostFirstYear.textContent = `$${totalCost.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
 
-                budgetChart.data.datasets[0].data = [devCost, apiCost, infraCost];
+                budgetChart.data.datasets.data = [devCost, apiCost, infraCost];
                 budgetChart.update();
             }
 
@@ -559,4 +709,5 @@
         });
     </script>
 </body>
+</html>
 </html>
