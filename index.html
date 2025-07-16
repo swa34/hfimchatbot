@@ -13,7 +13,7 @@
             background-color: #f8fafc;
             color: #1e293b;
         }
-       .chart-container {
+      .chart-container {
             position: relative;
             width: 100%;
             max-width: 800px;
@@ -22,27 +22,27 @@
             height: 350px;
         }
         @media (min-width: 768px) {
-           .chart-container {
+          .chart-container {
                 height: 450px;
             }
         }
-       .nav-link {
+      .nav-link {
             transition: color 0.3s ease;
         }
-       .nav-link.active,.nav-link:hover {
+      .nav-link.active,.nav-link:hover {
             color: #0d9488;
         }
-       .phase-content {
+      .phase-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
             padding: 0 1.5rem;
         }
-       .phase-content.open {
+      .phase-content.open {
             max-height: 500px; 
             padding: 1.5rem 1.5rem;
         }
-       .slider-thumb::-webkit-slider-thumb {
+      .slider-thumb::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
             width: 20px;
@@ -51,14 +51,14 @@
             cursor: pointer;
             border-radius: 50%;
         }
-       .slider-thumb::-moz-range-thumb {
+      .slider-thumb::-moz-range-thumb {
             width: 20px;
             height: 20px;
             background: #0d9488;
             cursor: pointer;
             border-radius: 50%;
         }
-       .code-block {
+      .code-block {
             background-color: #1e293b;
             color: #e2e8f0;
             padding: 1rem;
@@ -320,8 +320,8 @@
 | AEM/WordPress | | YOUR STANDALONE CHATBOT SVC |
 | (Chat Widget UI) |----->| (Hosted on AWS, Azure, etc.) |
 +------------------+     +--------------------------------+
-    AJAX Request | |
-                               V                   V
+     AJAX Request | |
+                             V                   V
                        +----------------+   +------------------+
 
 | RAG System / | | External LLM API |
