@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive LLM API Cost Analysis</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
@@ -13,7 +13,7 @@
             background-color: #f8fafc;
             color: #1e293b;
         }
-      .chart-container {
+       .chart-container {
             position: relative;
             width: 100%;
             max-width: 800px;
@@ -22,27 +22,27 @@
             height: 350px;
         }
         @media (min-width: 768px) {
-          .chart-container {
+           .chart-container {
                 height: 450px;
             }
         }
-      .nav-link {
+       .nav-link {
             transition: color 0.3s ease;
         }
-      .nav-link.active,.nav-link:hover {
+       .nav-link.active,.nav-link:hover {
             color: #0d9488;
         }
-      .phase-content {
+       .phase-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
             padding: 0 1.5rem;
         }
-      .phase-content.open {
+       .phase-content.open {
             max-height: 500px; 
             padding: 1.5rem 1.5rem;
         }
-      .slider-thumb::-webkit-slider-thumb {
+       .slider-thumb::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
             width: 20px;
@@ -51,14 +51,14 @@
             cursor: pointer;
             border-radius: 50%;
         }
-      .slider-thumb::-moz-range-thumb {
+       .slider-thumb::-moz-range-thumb {
             width: 20px;
             height: 20px;
             background: #0d9488;
             cursor: pointer;
             border-radius: 50%;
         }
-      .code-block {
+       .code-block {
             background-color: #1e293b;
             color: #e2e8f0;
             padding: 1rem;
@@ -316,16 +316,14 @@
   USER'S BROWSER
 |
 +------------------+     +--------------------------------+
-
-| AEM/WordPress | | YOUR STANDALONE CHATBOT SVC |
+| AEM/WordPress    | |   YOUR STANDALONE CHATBOT SVC |
 | (Chat Widget UI) |----->| (Hosted on AWS, Azure, etc.) |
 +------------------+     +--------------------------------+
-     AJAX Request | |
-                             V                   V
+    AJAX Request    |      |
+                               V                   V
                        +----------------+   +------------------+
-
-| RAG System / | | External LLM API |
-| Vector DB | | (OpenAI, Google) |
+                       | RAG System /   | | External LLM API |
+                       | Vector DB      | | (OpenAI, Google) |
                        +----------------+   +------------------+
 </pre>
                 </div>
@@ -398,10 +396,72 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Check if Chart.js is loaded
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js failed to load');
+                return;
+            }
 
-            const timelineData =;
+            const timelineData = [
+                {
+                    phase: "Phase 1",
+                    title: "Planning & Architecture",
+                    hours: "80",
+                    content: "<p><strong>Requirements Analysis:</strong> Define functional requirements, user stories, and acceptance criteria. Document the chatbot's scope, capabilities, and integration points.</p><p><strong>System Architecture:</strong> Design the RAG pipeline, API architecture, and data flow. Select technology stack and cloud infrastructure components.</p><p><strong>Knowledge Base Design:</strong> Plan document structure, chunking strategy, and embedding approach for optimal retrieval performance.</p>"
+                },
+                {
+                    phase: "Phase 2", 
+                    title: "RAG System Development",
+                    hours: "120",
+                    content: "<p><strong>Document Processing Pipeline:</strong> Build automated systems to ingest, parse, and chunk institutional documents. Implement text cleaning and preprocessing.</p><p><strong>Vector Database Setup:</strong> Configure Qdrant cloud instance, design indexing strategy, and implement embedding generation using OpenAI's text-embedding models.</p><p><strong>Retrieval Logic:</strong> Develop semantic search capabilities, similarity scoring, and context ranking algorithms for accurate information retrieval.</p>"
+                },
+                {
+                    phase: "Phase 3",
+                    title: "LLM Integration & API Development", 
+                    hours: "100",
+                    content: "<p><strong>LLM API Integration:</strong> Implement OpenAI GPT-4o-mini integration with proper error handling, rate limiting, and response processing.</p><p><strong>Prompt Engineering:</strong> Develop and optimize system prompts, context injection patterns, and response formatting for institutional voice and accuracy.</p><p><strong>Backend API:</strong> Create RESTful API endpoints for chat interactions, conversation management, and system health monitoring.</p>"
+                },
+                {
+                    phase: "Phase 4",
+                    title: "Frontend Widget Development",
+                    hours: "60", 
+                    content: "<p><strong>Chat Interface:</strong> Build responsive, accessible chat widget using modern JavaScript frameworks. Implement real-time messaging, typing indicators, and error states.</p><p><strong>UX/UI Design:</strong> Create institutional branding, mobile-responsive design, and intuitive user interactions that align with existing website aesthetics.</p><p><strong>Integration Preparation:</strong> Package widget for easy deployment across different CMS platforms with minimal configuration required.</p>"
+                },
+                {
+                    phase: "Phase 5", 
+                    title: "Testing, Deployment & Training",
+                    hours: "50",
+                    content: "<p><strong>Quality Assurance:</strong> Comprehensive testing including unit tests, integration tests, and user acceptance testing with real institutional scenarios.</p><p><strong>Production Deployment:</strong> Set up production infrastructure, monitoring, logging, and backup systems. Implement CI/CD pipelines for ongoing maintenance.</p><p><strong>Team Training:</strong> Train content managers and IT staff on system operation, knowledge base updates, and basic troubleshooting procedures.</p>"
+                }
+            ];
 
-            const teamData =;
+            const teamData = [
+                {
+                    icon: "👨‍💻",
+                    role: "Technical Lead",
+                    description: "Architecture design, LLM integration, RAG system development"
+                },
+                {
+                    icon: "🎨", 
+                    role: "Frontend Developer",
+                    description: "Chat widget UI/UX, responsive design, accessibility"
+                },
+                {
+                    icon: "🔧",
+                    role: "Backend Developer", 
+                    description: "API development, database integration, deployment"
+                },
+                {
+                    icon: "📊",
+                    role: "Data Engineer",
+                    description: "Document processing, embedding pipelines, vector DB optimization"
+                },
+                {
+                    icon: "🎯",
+                    role: "Product Manager",
+                    description: "Requirements gathering, stakeholder coordination, testing oversight"
+                }
+            ];
 
             const models = {
                 'gpt-4o-mini': { name: 'OpenAI GPT-4o-mini', input: 0.15, output: 0.60 },
@@ -466,10 +526,10 @@
             let costChart = new Chart(costChartCtx, {
                 type: 'bar',
                 data: {
-                    labels:,
+                    labels: [],
                     datasets: [{
                         label: 'Projected Monthly Cost ($)',
-                        data:,
+                        data: [],
                         backgroundColor: '#0d9488',
                         borderColor: '#047857',
                         borderWidth: 1
@@ -482,11 +542,9 @@
                     plugins: { legend: { display: false }, tooltip: {
                         callbacks: {
                             label: function(context) {
-                                let label = context.dataset.label |
-
-| '';
+                                let label = context.dataset.label || '';
                                 if (label) { label += ': '; }
-                                if (context.parsed.y!== null) {
+                                if (context.parsed.y !== null) {
                                     label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
                                 }
                                 return label;
@@ -500,9 +558,9 @@
             let budgetChart = new Chart(budgetChartCtx, {
                  type: 'doughnut',
                 data: {
-                    labels:,
+                    labels: ['Development Cost', 'Annual API Cost', 'Annual Infrastructure'],
                     datasets: [{
-                        data: ,
+                        data: [30750, 72, 450],
                         backgroundColor: ['#0f766e', '#14b8a6', '#99f6e4'],
                         hoverOffset: 4
                     }]
@@ -515,11 +573,9 @@
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    let label = context.label |
-
-| '';
+                                    let label = context.label || '';
                                     if (label) { label += ': '; }
-                                    if (context.parsed!== null) {
+                                    if (context.parsed !== null) {
                                         label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
                                     }
                                     return label;
@@ -556,8 +612,8 @@
             }
 
             function updateCostChart(dailyVisits, engagementRate) {
-                const labels =;
-                const data =;
+                const labels = [];
+                const data = [];
                 Object.values(models).forEach(model => {
                     const dailyQueries = dailyVisits * engagementRate;
                     const monthlyTokens = dailyQueries * 2000 * 30;
@@ -567,14 +623,12 @@
                 });
                 
                 costChart.data.labels = labels;
-                costChart.data.datasets.data = data;
+                costChart.data.datasets[0].data = data;
                 costChart.update();
             }
 
             function updateBudget() {
-                const devRate = parseFloat(devRateInput.value) |
-
-| 0;
+                const devRate = parseFloat(devRateInput.value) || 0;
                 const devCost = 410 * devRate;
                 const apiCost = parseFloat(apiCostAnnual.textContent.replace(/[^0-9.-]+/g,""));
                 const infraCost = 450; // Updated: $0 for DB (Qdrant) + ~$450 for hosting
@@ -584,7 +638,7 @@
                 infraCostAnnual.textContent = `~$${infraCost} (Est.)`;
                 totalCostFirstYear.textContent = `$${totalCost.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
 
-                budgetChart.data.datasets.data = [devCost, apiCost, infraCost];
+                budgetChart.data.datasets[0].data = [devCost, apiCost, infraCost];
                 budgetChart.update();
             }
 
@@ -619,7 +673,6 @@
                     }
                 });
             });
-
 
             calculateCosts();
         });
