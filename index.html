@@ -1,12 +1,13 @@
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive LLM API Cost Analysis</title>
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
-    <script src="[https://cdn.jsdelivr.net/npm/chart.js](https://cdn.jsdelivr.net/npm/chart.js)"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('[https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap)');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
@@ -65,24 +66,6 @@
             font-family: monospace;
             font-size: 0.875rem;
             overflow-x: auto;
-        }
-        /* Custom table styles */
-       .custom-table {
-            min-width: 100%;
-            border-collapse: collapse;
-        }
-       .custom-table th,.custom-table td {
-            padding: 0.75rem 1rem;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-       .custom-table th {
-            background-color: #f8fafc;
-            font-weight: 600;
-            color: #475569;
-        }
-       .custom-table tbody tr:hover {
-            background-color: #f1f5f9;
         }
     </style>
 </head>
@@ -200,124 +183,57 @@
             <div class="bg-white rounded-xl shadow-md p-6 md:p-8 space-y-12">
                 
                 <div>
-                    <h3 class="text-2xl font-semibold text-slate-800 mb-4">A Framework for Understanding Vector Database Pricing</h3>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4">Pricing Philosophies</h3>
                     <p class="text-slate-600 mb-6">The market for managed vector database services is dominated by two distinct pricing philosophies. Understanding these models is essential for aligning the technology choice with the financial realities of a pilot project.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="bg-slate-50 p-6 rounded-lg">
-                            <h4 class="text-lg font-bold text-slate-900 mb-2">Provisioned Capacity Models</h4>
-                            <p class="text-slate-600 text-sm">This model requires paying a fixed hourly or monthly rate for dedicated resources (e.g., Azure AI Search, Vertex AI Vector Search). Costs are predictable but constant, regardless of usage. This is financially inefficient for pilot projects with intermittent or low usage, creating a significant barrier to entry.</p>
+                            <h4 class="text-lg font-semibold text-slate-900 mb-2">Provisioned Capacity</h4>
+                            <p class="text-slate-600 text-sm">This model (e.g., Azure AI Search, Vertex AI) requires paying a fixed hourly or monthly rate for dedicated resources. Costs are predictable but constant, regardless of usage. This is financially inefficient for pilot projects with intermittent or low usage.</p>
                         </div>
                         <div class="bg-slate-50 p-6 rounded-lg">
-                            <h4 class="text-lg font-bold text-slate-900 mb-2">Usage-Based ("Serverless") Models</h4>
-                            <p class="text-slate-600 text-sm">This model aligns costs directly with consumption, billing for data stored, written, and read (e.g., Pinecone, Qdrant, Weaviate). It offers an exceptionally low cost to start, making it ideal for pilots by minimizing upfront financial commitment and risk. Costs scale transparently with usage.</p>
+                            <h4 class="text-lg font-semibold text-slate-900 mb-2">Usage-Based ("Serverless")</h4>
+                            <p class="text-slate-600 text-sm">This model (e.g., Pinecone, Qdrant, Weaviate) aligns costs directly with consumption, billing for data stored, written, and read. It offers an exceptionally low cost to start, making it ideal for pilots by minimizing upfront financial commitment and risk.</p>
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <h3 class="text-2xl font-semibold text-slate-800 mb-4">Comparative Analysis of Leading Services</h3>
-                    <p class="text-slate-600 mb-6">A head-to-head comparison reveals significant differences in pricing structures and suitability for the pilot project. The following table provides a summary of key differentiators.</p>
-                    <div class="overflow-x-auto rounded-lg border border-slate-200">
-                        <table class="custom-table">
-                            <thead>
-                                <tr>
-                                    <th>Provider</th>
-                                    <th>Core Pricing Model</th>
-                                    <th>Key Cost Drivers</th>
-                                    <th>Free Tier / Pilot Offering</th>
-                                    <th>Minimum Monthly Production Cost</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-sm">
-                                <tr>
-                                    <td class="font-semibold text-slate-800">Pinecone</td>
-                                    <td>Usage-Based with Minimum</td>
-                                    <td>Storage (GB/mo), Read/Write Units</td>
-                                    <td>Limited "Starter" plan for non-production use</td>
-                                    <td class="font-semibold">$50</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-semibold text-slate-800">Qdrant</td>
-                                    <td>Usage-Based / Provisioned</td>
-                                    <td>Provisioned Cluster Size (CPU/RAM)</td>
-                                    <td class="text-teal-600 font-semibold">1 GB "Free Forever" Cluster</td>
-                                    <td class="text-teal-600 font-semibold">$0 (within free tier)</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-semibold text-slate-800">Weaviate</td>
-                                    <td>Usage-Based with Minimum</td>
-                                    <td>Vector Dimensions Stored</td>
-                                    <td>Free sandbox for prototyping</td>
-                                    <td class="font-semibold">$25</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-semibold text-slate-800">Azure AI Search</td>
-                                    <td>Provisioned Capacity</td>
-                                    <td>Fixed Tiered Rate (Search Units)</td>
-                                    <td>Limited 50 MB free tier</td>
-                                    <td class="font-semibold">~$74 (Basic Tier)</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-semibold text-slate-800">Vertex AI Vector Search</td>
-                                    <td>Provisioned Capacity</td>
-                                    <td>Fixed Node Rate (VM uptime), Build Cost</td>
-                                    <td>New customer credits ($300-$1000)</td>
-                                    <td class="font-semibold">~$68 (Smallest Node)</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="text-2xl font-semibold text-slate-800 mb-4">Financial Modeling & Projections</h3>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4">Projected First-Year Costs</h3>
                     <p class="text-slate-600 mb-6">Based on a projected knowledge base size of ~20.5 MB (well within free tier limits) and varying query volumes, we can project the first-year costs for each provider.</p>
                     <div class="overflow-x-auto rounded-lg border border-slate-200">
-                        <table class="custom-table">
-                             <thead>
+                        <table class="min-w-full divide-y divide-slate-200">
+                            <thead class="bg-slate-50">
                                 <tr>
-                                    <th>Provider</th>
-                                    <th>Low Usage (Annual)</th>
-                                    <th>Moderate Usage (Annual)</th>
-                                    <th>High Usage (Annual)</th>
-                                    <th>Key Cost Justification</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Provider</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Annual Cost</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Key Justification</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-sm">
+                            <tbody class="bg-white divide-y divide-slate-200 text-sm">
                                 <tr>
-                                    <td class="font-semibold text-slate-800">Pinecone</td>
-                                    <td>$600</td>
-                                    <td>$600</td>
-                                    <td>$600</td>
-                                    <td>Cost is determined by the $50/month minimum commitment.</td>
+                                    <td class="px-6 py-4 whitespace-nowrap font-medium text-slate-800">Pinecone</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-slate-700">$600</td>
+                                    <td class="px-6 py-4 text-slate-600">Cost is determined by the $50/month minimum commitment.</td>
+                                </tr>
+                                <tr class="bg-teal-50">
+                                    <td class="px-6 py-4 whitespace-nowrap font-bold text-teal-700">Qdrant</td>
+                                    <td class="px-6 py-4 whitespace-nowrap font-bold text-teal-700">$0</td>
+                                    <td class="px-6 py-4 font-semibold text-teal-600">Projected index size fits within the 1 GB "Free Forever" tier.</td>
                                 </tr>
                                 <tr>
-                                    <td class="font-semibold text-slate-800">Qdrant</td>
-                                    <td class="text-teal-600 font-semibold">$0</td>
-                                    <td class="text-teal-600 font-semibold">$0</td>
-                                    <td class="text-teal-600 font-semibold">$0</td>
-                                    <td class="text-teal-600">Projected index size fits within the 1 GB "Free Forever" tier.</td>
+                                    <td class="px-6 py-4 whitespace-nowrap font-medium text-slate-800">Weaviate</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-slate-700">$300</td>
+                                    <td class="px-6 py-4 text-slate-600">Cost is determined by the $25/month minimum commitment.</td>
                                 </tr>
                                 <tr>
-                                    <td class="font-semibold text-slate-800">Weaviate</td>
-                                    <td>$300</td>
-                                    <td>$300</td>
-                                    <td>$300</td>
-                                    <td>Cost is determined by the $25/month minimum commitment.</td>
+                                    <td class="px-6 py-4 whitespace-nowrap font-medium text-slate-800">Azure AI Search</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-slate-700">~$885</td>
+                                    <td class="px-6 py-4 text-slate-600">Cost is the fixed rate for the provisioned "Basic" tier.</td>
                                 </tr>
                                 <tr>
-                                    <td class="font-semibold text-slate-800">Azure AI Search</td>
-                                    <td>~$885</td>
-                                    <td>~$885</td>
-                                    <td>~$885</td>
-                                    <td>Cost is the fixed rate for the provisioned "Basic" tier.</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-semibold text-slate-800">Vertex AI Vector Search</td>
-                                    <td>~$816</td>
-                                    <td>~$816</td>
-                                    <td>~$816</td>
-                                    <td>Cost is the fixed rate for the smallest provisioned node.</td>
+                                    <td class="px-6 py-4 whitespace-nowrap font-medium text-slate-800">Vertex AI Vector Search</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-slate-700">~$816</td>
+                                    <td class="px-6 py-4 text-slate-600">Cost is the fixed rate for the smallest provisioned node.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -325,13 +241,13 @@
                 </div>
 
                 <div>
-                    <h3 class="text-2xl font-semibold text-slate-800 mb-4">Strategic Recommendation</h3>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4">Strategic Recommendation</h3>
                      <div class="bg-teal-50 border-l-4 border-teal-500 text-teal-800 p-6 rounded-lg shadow-sm">
                         <h4 class="font-bold mb-2">Primary Recommendation: Select Qdrant's Managed Cloud</h4>
                         <p class="text-sm md:text-base">This recommendation is driven by an overwhelming financial advantage. The availability of a generous 1 GB "Free Forever" tier effectively eliminates the vector database infrastructure cost for the entire pilot phase. This represents a direct, tangible saving of $300 to $885+ per year compared to all other viable alternatives, maximally aligning with the project's "start smart, scale smart" principle by removing a key fixed cost during a period of uncertain usage.</p>
                     </div>
                     <div class="mt-6">
-                        <h4 class="text-lg font-bold text-slate-900 mb-2">Contingency and Scaling Strategy</h4>
+                        <h4 class="text-lg font-semibold text-slate-900 mb-2">Contingency and Scaling Strategy</h4>
                         <p class="text-slate-600 text-sm">Should Qdrant prove unsuitable, Weaviate is the next most cost-effective option at $300 annually. A formal re-evaluation of the provider should be triggered if the knowledge base exceeds 1 GB. At a much larger scale, a new analysis should evaluate migrating to a provisioned service like Azure or Vertex AI, or exploring a self-hosted open-source solution.</p>
                     </div>
                 </div>
@@ -352,15 +268,15 @@
                     <p class="mb-6 text-slate-600">Provides the LLM with relevant information "just-in-time" from your knowledge base to answer questions. It doesn't retrain the model, it informs it.</p>
                     <ul class="space-y-4">
                         <li class="flex items-start">
-                            <span class="text-green-500 text-2xl mr-3">✓</span>
+                            <span class="text-green-500 text-2xl mr-3">&#10003;</span>
                             <div><strong class="text-slate-800">High Accuracy:</strong> Responses are grounded in your official documents, minimizing factual errors or "hallucinations."</div>
                         </li>
                         <li class="flex items-start">
-                             <span class="text-green-500 text-2xl mr-3">✓</span>
+                             <span class="text-green-500 text-2xl mr-3">&#10003;</span>
                             <div><strong class="text-slate-800">Cost-Effective:</strong> Avoids expensive training runs. You only pay for standard API calls.</div>
                         </li>
                         <li class="flex items-start">
-                            <span class="text-green-500 text-2xl mr-3">✓</span>
+                            <span class="text-green-500 text-2xl mr-3">&#10003;</span>
                             <div><strong class="text-slate-800">Agile & Maintainable:</strong> Updating the chatbot's knowledge is as simple as editing a source document. Fast, easy, and free.</div>
                         </li>
                     </ul>
@@ -371,15 +287,15 @@
                      <p class="mb-6 text-slate-600">Permanently retrains the base LLM on a custom dataset of your institution's Q&A pairs, creating a specialized model variant.</p>
                      <ul class="space-y-4">
                         <li class="flex items-start">
-                            <span class="text-red-500 text-2xl mr-3">✗</span>
+                            <span class="text-red-500 text-2xl mr-3">&#10007;</span>
                             <div><strong class="text-slate-800">High Upfront Cost:</strong> Requires extensive data preparation and expensive computational training runs (thousands of dollars).</div>
                         </li>
                         <li class="flex items-start">
-                           <span class="text-red-500 text-2xl mr-3">✗</span>
+                           <span class="text-red-500 text-2xl mr-3">&#10007;</span>
                             <div><strong class="text-slate-800">Higher Operational Cost:</strong> API calls to custom-tuned models are more expensive than base models.</div>
                         </li>
                          <li class="flex items-start">
-                            <span class="text-red-500 text-2xl mr-3">✗</span>
+                            <span class="text-red-500 text-2xl mr-3">&#10007;</span>
                             <div><strong class="text-slate-800">Slow to Update:</strong> The model is a static snapshot. Updating it requires repeating the entire costly and slow fine-tuning process.</div>
                         </li>
                     </ul>
@@ -425,7 +341,7 @@
                             <p class="text-slate-600 text-sm mb-4">Create a simple AEM component that adds the following two lines to your page templates, loading the widget.</p>
                             <div class="code-block">
 &lt;div id="chatbot-root"&gt;&lt;/div&gt;
-&lt;script src="[https://your-cdn.com/chatbot-widget.js](https://your-cdn.com/chatbot-widget.js)"&gt;&lt;/script&gt;
+&lt;script src="https://your-cdn.com/chatbot-widget.js"&gt;&lt;/script&gt;
                             </div>
                         </div>
                         <div class="md:col-span-2">
@@ -440,7 +356,7 @@
         <section id="budget" class="scroll-mt-24">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">First-Year Budget Outlook</h2>
-                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">This summary consolidates the total estimated investment for the first year, combining one-time development with recurring operational costs, updated with the latest infrastructure analysis.</p>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">This summary consolidates the total estimated investment for the first year, combining one-time development with recurring operational costs.</p>
             </div>
             <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -661,7 +577,7 @@
 | 0;
                 const devCost = 410 * devRate;
                 const apiCost = parseFloat(apiCostAnnual.textContent.replace(/[^0-9.-]+/g,""));
-                const infraCost = 450; // Updated based on new analysis
+                const infraCost = 450; // Updated: $0 for DB (Qdrant) + ~$450 for hosting
                 const totalCost = devCost + apiCost + infraCost;
 
                 devCostTotal.textContent = `$${devCost.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
@@ -709,5 +625,4 @@
         });
     </script>
 </body>
-</html>
 </html>
