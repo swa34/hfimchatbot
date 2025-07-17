@@ -67,6 +67,28 @@
             font-size: 0.875rem;
             overflow-x: auto;
         }
+        .tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 8px;
+            width: 280px;
+            background-color: #1e293b;
+            color: #fff;
+            text-align: center;
+            padding: 8px;
+            border-radius: 6px;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            font-size: 0.75rem;
+            line-height: 1.25;
+        }
+        .has-tooltip:hover .tooltip {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -193,6 +215,7 @@
                         <table class="min-w-full divide-y divide-slate-200">
                             <thead class="bg-slate-50">
                                 <tr>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">Select</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Provider</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Est. Annual Cost</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Key Cost Justification</th>
@@ -320,7 +343,13 @@
                         <h3 class="text-xl font-bold mb-4">Cost Component Breakdown</h3>
                         <div class="space-y-4">
                              <div>
-                                 <label for="dev-rate-input" class="block text-sm font-medium text-slate-700">Blended Hourly Rate for Development ($)</label>
+                                 <label for="dev-rate-input" class="block text-sm font-medium text-slate-700">
+                                    Blended Hourly Rate for Development ($)
+                                    <span class="relative inline-block align-middle has-tooltip ml-1">
+                                        <span class="font-bold text-teal-600">(?)</span>
+                                        <span class="tooltip">This is an average hourly cost across all specialists (engineers, developers, analysts). Adjust this single rate to model different labor cost scenarios for the project.</span>
+                                    </span>
+                                 </label>
                                  <input type="number" id="dev-rate-input" value="75" class="mt-1 block w-full max-w-xs pl-3 pr-3 py-2 text-base border-slate-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md">
                              </div>
                             <dl class="space-y-2 text-sm">
@@ -358,6 +387,8 @@
                 console.error('Chart.js failed to load');
                 return;
             }
+            
+            let manuallySelectedProvider = null;
 
             const timelineData = [
                 { phase: 1, title: 'Planning & Architecture', hours: 100, content: 'Defining the technical blueprint, selecting the technology stack, and designing the system architecture for security, scalability, and maintainability.' },
@@ -566,7 +597,6 @@
                     {
                         name: 'Weaviate',
                         calculate: (gb) => {
-                            // Assuming ~2M vectors per GB for calculation
                             const cost = Math.max(25, (gb * 2000) * 0.095) * 12;
                             return { cost: cost, justification: 'Based on $25/mo minimum or dimension-based storage cost.' };
                         }
@@ -581,7 +611,7 @@
                     {
                         name: 'Vertex AI Vector Search',
                         calculate: (gb) => {
-                            const cost = (68 + (gb * 1.5)) * 12; // Simplified scaling from base
+                            const cost = (68 + (gb * 1.5)) * 12;
                             return { cost: cost, justification: 'Based on fixed hourly node cost plus estimated storage scaling.' };
                         }
                     }
@@ -597,45 +627,56 @@
                     }
                     return { name: p.name, ...result };
                 });
-
-                costData.sort((a, b) => a.cost - b.cost);
+                
+                const providerToSelect = manuallySelectedProvider || bestProvider;
 
                 dbCostTable.innerHTML = '';
                 costData.forEach(data => {
                     const row = document.createElement('tr');
-                    if (data.name === bestProvider) {
+                    const isSelected = data.name === providerToSelect;
+                    
+                    if (isSelected) {
                         row.className = 'bg-teal-50';
                     }
+
                     row.innerHTML = `
-                        <td class="px-6 py-4 whitespace-nowrap font-semibold ${data.name === bestProvider ? 'text-teal-700' : 'text-slate-800'}">${data.name}</td>
-                        <td class="px-6 py-4 whitespace-nowrap font-semibold ${data.name === bestProvider ? 'text-teal-700' : 'text-slate-700'}">~$${data.cost.toLocaleString()}</td>
+                        <td class="px-6 py-4 text-center">
+                            <input type="radio" name="db-provider-select" value="${data.name}" class="h-4 w-4 text-teal-600 border-gray-300 focus:ring-teal-500" ${isSelected ? 'checked' : ''}>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-semibold ${isSelected ? 'text-teal-700' : 'text-slate-800'}">${data.name}</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-semibold ${isSelected ? 'text-teal-700' : 'text-slate-700'}">~$${data.cost.toLocaleString()}</td>
                         <td class="px-6 py-4 text-slate-600">${data.justification}</td>
                     `;
                     dbCostTable.appendChild(row);
                 });
                 
-                dbRecommendation.innerHTML = `<h4 class="font-bold mb-2">Recommendation for ${size}GB</h4><p class="text-sm md:text-base">At this scale, <strong>${bestProvider}</strong> appears to be the most cost-effective option with an estimated annual cost of <strong>~$${minCost.toLocaleString()}</strong>. The optimal choice depends on the trade-offs between pure cost, ecosystem alignment, and specific feature requirements.</p>`;
+                dbRecommendation.innerHTML = `<h4 class="font-bold mb-2">Recommendation for ${size}GB</h4><p class="text-sm md:text-base">At this scale, <strong>${bestProvider}</strong> is the most cost-effective option. You have currently selected <strong>${providerToSelect}</strong> for budget calculation. The optimal choice depends on the trade-offs between pure cost, ecosystem alignment, and specific feature requirements.</p>`;
 
                 updateBudget();
             }
 
-            function getMinDbCost() {
+            function getSelectedDbCost() {
+                const selectedProviderName = document.querySelector('input[name="db-provider-select"]:checked')?.value;
+                if (!selectedProviderName) return 0;
+
                 const size = parseInt(dbSizeSlider.value);
-                 const providers = [
-                    { calculate: (gb) => Math.max(50, gb * 0.33) * 12 },
-                    { calculate: (gb) => (gb <= 1)? 0 : (25 + (gb - 1) * 8) * 12 },
-                    { calculate: (gb) => Math.max(25, (gb * 2000) * 0.095) * 12 },
-                    { calculate: (gb) => (gb <= 15)? 74 * 12 : (gb <= 160)? 246 * 12 : 981 * 12 },
-                    { calculate: (gb) => (68 + (gb * 1.5)) * 12 }
+                const providers = [
+                    { name: 'Pinecone', calculate: (gb) => Math.max(50, gb * 0.33) * 12 },
+                    { name: 'Qdrant', calculate: (gb) => (gb <= 1)? 0 : (25 + (gb - 1) * 8) * 12 },
+                    { name: 'Weaviate', calculate: (gb) => Math.max(25, (gb * 2000) * 0.095) * 12 },
+                    { name: 'Azure AI Search', calculate: (gb) => (gb <= 15)? 74 * 12 : (gb <= 160)? 246 * 12 : 981 * 12 },
+                    { name: 'Vertex AI Vector Search', calculate: (gb) => (68 + (gb * 1.5)) * 12 }
                 ];
-                return Math.min(...providers.map(p => p.calculate(size)));
+
+                const provider = providers.find(p => p.name === selectedProviderName);
+                return provider ? provider.calculate(size) : 0;
             }
 
             function updateBudget() {
                 const devRate = parseFloat(devRateInput.value) || 0;
                 const devCost = 410 * devRate;
                 const apiCost = parseFloat(apiCostAnnual.textContent.replace(/[^0-9.-]+/g,""));
-                const dbCost = getMinDbCost();
+                const dbCost = getSelectedDbCost();
                 const hostingCost = 450;
                 const infraCost = dbCost + hostingCost;
 
@@ -660,7 +701,18 @@
             
             modelSelect.addEventListener('change', calculateApiCosts);
             devRateInput.addEventListener('input', updateBudget);
-            dbSizeSlider.addEventListener('input', calculateDatabaseCosts);
+            
+            dbSizeSlider.addEventListener('input', () => {
+                manuallySelectedProvider = null; // Reset selection when slider changes
+                calculateDatabaseCosts();
+            });
+
+            dbCostTable.addEventListener('change', (e) => {
+                if (e.target.name === 'db-provider-select') {
+                    manuallySelectedProvider = e.target.value;
+                    calculateDatabaseCosts(); // Rerun to update highlighting and recommendation
+                }
+            });
             
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('main section');
