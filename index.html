@@ -39,7 +39,7 @@
             padding: 0 1.5rem;
         }
     .phase-content.open {
-            max-height: 500px; 
+            max-height: 500px; /* Adjust as needed for content */
             padding: 1.5rem 1.5rem;
         }
     .slider-thumb::-webkit-slider-thumb {
@@ -201,6 +201,16 @@
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Interactive Vector Database Cost Analysis</h2>
                 <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Use the slider to model costs for different knowledge base sizes. The analysis shows how costs scale beyond free tiers into standard paid plans.</p>
+                <!-- NEW LINK TO VECTORDB.HTML -->
+                <p class="mt-6">
+                    <a href="vectorDB.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                        Learn More: What is a Vector Database?
+                        <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </p>
             </div>
             <div class="bg-white rounded-xl shadow-md p-6 md:p-8 space-y-8">
                 
@@ -294,14 +304,14 @@
                 <p class="text-center text-slate-600 max-w-2xl mx-auto mb-8">The core principle is that your website (AEM/WordPress) is separate from the chatbot's "brain." The website displays a simple chat widget, which communicates with a standalone chatbot service. This makes the chatbot portable and easy to maintain.</p>
                 <div class="code-block text-center text-sm leading-6">
 <pre>
-  USER'S BROWSER
+ USER'S BROWSER
 |
 +------------------+     +--------------------------------+
 | AEM/WordPress    |     | YOUR STANDALONE CHATBOT SVC    |
 | (Chat Widget UI) |----->| (Hosted on AWS, Azure, etc.)   |
 +------------------+     +--------------------------------+
-     AJAX Request            |                   |
-                             V                   V
+     AJAX Request           |                          |
+                            V                          V
                        +----------------+   +------------------+
                        | RAG System /   |   | External LLM API |
                        | Vector DB      |   | (OpenAI, Google) |
@@ -342,16 +352,16 @@
                     <div>
                         <h3 class="text-xl font-bold mb-4">Cost Component Breakdown</h3>
                         <div class="space-y-4">
-                             <div>
-                                 <label for="dev-rate-input" class="block text-sm font-medium text-slate-700">
+                            <div>
+                                <label for="dev-rate-input" class="block text-sm font-medium text-slate-700">
                                     Blended Hourly Rate for Development ($)
                                     <span class="relative inline-block align-middle has-tooltip ml-1">
                                         <span class="font-bold text-teal-600">(?)</span>
                                         <span class="tooltip">This is an average hourly cost across all specialists (engineers, developers, analysts). Adjust this single rate to model different labor cost scenarios for the project.</span>
                                     </span>
-                                 </label>
-                                 <input type="number" id="dev-rate-input" value="75" class="mt-1 block w-full max-w-xs pl-3 pr-3 py-2 text-base border-slate-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md">
-                             </div>
+                                </label>
+                                <input type="number" id="dev-rate-input" value="75" class="mt-1 block w-full max-w-xs pl-3 pr-3 py-2 text-base border-slate-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md">
+                            </div>
                             <dl class="space-y-2 text-sm">
                                 <div class="flex justify-between">
                                     <dt class="text-slate-600">One-Time Dev Cost (~410 hrs)</dt>
@@ -504,7 +514,7 @@
 
             const budgetChartCtx = document.getElementById('budget-chart').getContext('2d');
             let budgetChart = new Chart(budgetChartCtx, {
-                 type: 'doughnut',
+                   type: 'doughnut',
                 data: {
                     labels: ['Development', 'API Usage', 'Infrastructure'],
                     datasets: [{
@@ -544,11 +554,11 @@
                 const tokensPerQuery = 2000;
                 const monthlyTokens = dailyQueries * tokensPerQuery * 30;
                 
-                const inputTokenRatio = 0.25; 
-                const outputTokenRatio = 0.75;
+                const inputTokenRatio = 0.25;  // 25% input tokens
+                const outputTokenRatio = 0.75; // 75% output tokens
 
-                const monthlyInputTokens = monthlyTokens * inputTokenRatio / 1000000;
-                const monthlyOutputTokens = monthlyTokens * outputTokenRatio / 1000000;
+                const monthlyInputTokens = monthlyTokens * inputTokenRatio / 1000000; // per million tokens
+                const monthlyOutputTokens = monthlyTokens * outputTokenRatio / 1000000; // per million tokens
 
                 const cost = (monthlyInputTokens * model.input) + (monthlyOutputTokens * model.output);
 
@@ -566,7 +576,7 @@
                     const dailyQueries = dailyVisits * engagementRate;
                     const monthlyTokens = dailyQueries * 2000 * 30;
                     const cost = ((monthlyTokens * 0.25 / 1000000) * model.input) + ((monthlyTokens * 0.75 / 1000000) * model.output);
-                    labels.push(model.name.split(' ').slice(1).join(' ')); 
+                    labels.push(model.name.split(' ').slice(1).join(' ')); // Shorten label for chart
                     data.push(cost);
                 });
                 
@@ -583,27 +593,28 @@
                     {
                         name: 'Pinecone',
                         calculate: (gb) => {
-                            const cost = Math.max(50, gb * 0.33) * 12;
+                            const cost = Math.max(50, gb * 0.33) * 12; // Example: $50/mo minimum or $0.33/GB/mo
                             return { cost: cost, justification: 'Based on $50/mo minimum or $0.33/GB/mo, whichever is higher.' };
                         }
                     },
                     {
                         name: 'Qdrant',
                         calculate: (gb) => {
-                            const cost = (gb <= 1) ? 0 : (25 + (gb - 1) * 8) * 12;
+                            const cost = (gb <= 1) ? 0 : (25 + (gb - 1) * 8) * 12; // Example: Free up to 1GB, then scales
                             return { cost: cost, justification: 'Free up to 1GB, then scales from a $25/mo base.' };
                         }
                     },
                     {
                         name: 'Weaviate',
                         calculate: (gb) => {
-                            const cost = Math.max(25, (gb * 2000) * 0.095) * 12;
+                            const cost = Math.max(25, (gb * 2000) * 0.095) * 12; // Example: $25/mo minimum or dimension-based cost
                             return { cost: cost, justification: 'Based on $25/mo minimum or dimension-based storage cost.' };
                         }
                     },
                     {
                         name: 'Azure AI Search',
                         calculate: (gb) => {
+                            // Simplified tiers for example: Basic (15GB), S1 (160GB), S2 (500GB)
                             const cost = (gb <= 15) ? 74 * 12 : (gb <= 160) ? 246 * 12 : 981 * 12;
                             return { cost: cost, justification: 'Fixed annual cost based on provisioned tier (Basic, S1, etc.).' };
                         }
@@ -611,7 +622,7 @@
                     {
                         name: 'Vertex AI Vector Search',
                         calculate: (gb) => {
-                            const cost = (68 + (gb * 1.5)) * 12;
+                            const cost = (68 + (gb * 1.5)) * 12; // Example: Fixed hourly node cost + storage scaling
                             return { cost: cost, justification: 'Based on fixed hourly node cost plus estimated storage scaling.' };
                         }
                     }
@@ -636,7 +647,7 @@
                     const isSelected = data.name === providerToSelect;
                     
                     if (isSelected) {
-                        row.className = 'bg-teal-50';
+                        row.className = 'bg-teal-50'; // Highlight selected row
                     }
 
                     row.innerHTML = `
@@ -677,7 +688,7 @@
                 const devCost = 410 * devRate;
                 const apiCost = parseFloat(apiCostAnnual.textContent.replace(/[^0-9.-]+/g,""));
                 const dbCost = getSelectedDbCost();
-                const hostingCost = 450;
+                const hostingCost = 450; // Example annual hosting cost
                 const infraCost = dbCost + hostingCost;
 
                 devCostTotal.textContent = `$${devCost.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
@@ -714,6 +725,7 @@
                 }
             });
             
+            // Smooth scrolling for navigation
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('main section');
 
@@ -721,7 +733,8 @@
                 let current = '';
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
-                    if (window.pageYOffset >= sectionTop - 80) {
+                    // Adjust offset to trigger active state slightly before section reaches top
+                    if (window.pageYOffset >= sectionTop - 80) { 
                         current = section.getAttribute('id');
                     }
                 });
@@ -733,6 +746,7 @@
                 });
             });
 
+            // Initial calculations on page load
             calculateApiCosts();
             calculateDatabaseCosts();
         });
