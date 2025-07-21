@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Retrieval-Augmented Generation (RAG)</title>
+    <!-- Link to your CSS file for styling (assuming it's in the same directory) -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Optional: Link to Google Fonts for a nicer font, e.g., Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <h1>Retrieval-Augmented Generation (RAG): Powering Smarter LLMs</h1>
+    </header>
+
+    <main>
+        <section class="intro-section">
+            <p>Large Language Models (LLMs) like ChatGPT are amazing at generating text, but they sometimes
+                "hallucinate" (make up facts) or lack up-to-date information. **Retrieval-Augmented Generation (RAG)**
+                is a powerful technique that helps LLMs provide more accurate, relevant, and current answers by giving
+                them access to external, verifiable knowledge.</p>
+            <div class="graphic-container">
+                <!-- Placeholder for a graphic representing the core RAG concept -->
+                <img src="images/rag_overview.png"
+                    alt="Diagram showing a user query going into a RAG system, which interacts with a knowledge base and an LLM to produce an accurate answer."
+                    class="graphic">
+                <p class="caption">RAG combines the power of LLMs with external knowledge for better answers.</p>
+            </div>
+        </section>
+
+        <section class="concept-section">
+            <h2>Why RAG? The LLM Challenge</h2>
+            <p>Imagine an LLM as a brilliant student who has read a vast library but sometimes forgets specific details
+                or hasn't read the very latest books. When asked a question, it might confidently give a plausible but
+                incorrect answer, or simply say it doesn't know about recent events.</p>
+            <p>RAG solves this by giving the LLM a "cheat sheet" of relevant information *before* it answers. This
+                ensures the answer is grounded in facts you provide, rather than just what the model "remembers" from
+                its training data.</p>
+        </section>
+
+        <section class="how-it-works-section">
+            <h2>How RAG Works (in Simple Steps):</h2>
+
+            <div class="step-card">
+                <h3>Step 1: Indexing Your Knowledge Base (Offline Process)</h3>
+                <p>First, you take all your institution's documents, articles, FAQs, etc. (your "knowledge base"). Each
+                    piece of this information is processed and converted into numerical "vector embeddings" (just like
+                    we discussed for vector databases!). These vectors are then stored in a specialized **Vector
+                    Database**.</p>
+                <div class="graphic-container">
+                    <!-- Placeholder for a graphic showing documents being indexed into a vector database -->
+                    <img src="images/rag_indexing.svg"
+                        alt="Diagram showing various documents flowing into an 'Embedding Model' which then stores numerical vectors in a 'Vector Database'."
+                        class="graphic">
+                    <p class="caption">Your documents are converted into searchable vectors and stored.</p>
+                </div>
+                <p>This step is usually done once, or whenever your knowledge base is updated.</p>
+            </div>
+
+            <div class="step-card">
+                <h3>Step 2: Retrieval (When a User Asks a Question)</h3>
+                <p>When a user asks a question, that question is also converted into a vector embedding. This "query
+                    vector" is then used to search your Vector Database. The database quickly finds the most relevant
+                    document vectors (and thus the original documents) that are "closest" in meaning to the user's
+                    question.</p>
+                <div class="graphic-container">
+                    <!-- Placeholder for a graphic showing a user query being vectorized and retrieving documents -->
+                    <img src="images/rag_retrieval.svg"
+                        alt="Diagram showing a user query going into an 'Embedding Model', then searching a 'Vector Database' to retrieve 'Relevant Documents'."
+                        class="graphic">
+                    <p class="caption">The user's question is used to find the most relevant information from your
+                        knowledge base.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <h3>Step 3: Augmentation (Adding Context to the LLM)</h3>
+                <p>Now, instead of just sending the user's question directly to the LLM, the system takes the **original
+                    user question** AND the **retrieved relevant documents** and combines them into a single, enhanced
+                    prompt. This augmented prompt is then sent to the LLM.</p>
+                <div class="graphic-container">
+                    <!-- Placeholder for a graphic showing retrieved documents and query being fed into an LLM -->
+                    <img src="images/rag_augmentation.svg"
+                        alt="Diagram showing 'Relevant Documents' and 'User Query' combined and fed as input to a 'Large Language Model (LLM)'."
+                        class="graphic">
+                    <p class="caption">The LLM receives both the question and the factual context.</p>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <h3>Step 4: Generation (LLM Answers with Context)</h3>
+                <p>With the relevant context right in front of it, the LLM can now generate a much more accurate,
+                    informed, and factual answer. It uses its vast general knowledge, but it prioritizes and grounds its
+                    response in the specific information provided from your knowledge base.</p>
+                <div class="graphic-container">
+                    <!-- Placeholder for a graphic showing the LLM generating an answer based on context -->
+                    <img src="images/rag_generation.svg"
+                        alt="Diagram showing the 'Large Language Model (LLM)' processing the augmented input and generating a 'Factual Answer'."
+                        class="graphic">
+                    <p class="caption">The LLM generates a precise answer, grounded in your provided information.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="applications-section">
+            <h2>Why RAG is a Game-Changer:</h2>
+            <ul>
+                <li><strong>Reduces Hallucinations:</strong> LLMs are less likely to make up facts because they have
+                    real data to refer to.</li>
+                <li><strong>Up-to-Date Information:</strong> You can update your knowledge base anytime, and the LLM
+                    will immediately have access to the latest information without needing expensive retraining.</li>
+                <li><strong>Cost-Effective:</strong> Avoids the high costs and complexity of "fine-tuning" an LLM for
+                    specific knowledge. You only pay for standard API calls and vector database storage.</li>
+                <li><strong>Transparency & Trust:</strong> RAG systems can often cite the exact documents or sources
+                    they used to generate an answer, building user trust.</li>
+                <li><strong>Scalability:</strong> Easily scales as your knowledge base grows or user queries increase.
+                </li>
+            </ul>
+            <p class="conclusion">RAG is the recommended approach for building accurate, reliable, and maintainable
+                LLM-powered applications that need to leverage specific, proprietary, or frequently updated information.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Your Name/Organization. All rights reserved.</p>
+        <p><a href="index.html" class="text-white hover:text-teal-200 mt-2 inline-block">Back to LLM Cost Analysis</a>
+        </p>
+    </footer>
+</body>
+
+</html>
