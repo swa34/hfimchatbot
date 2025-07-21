@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +9,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
             color: #1e293b;
         }
-    .chart-container {
+
+        .chart-container {
             position: relative;
             width: 100%;
             max-width: 800px;
@@ -21,28 +24,36 @@
             margin-right: auto;
             height: 350px;
         }
+
         @media (min-width: 768px) {
-        .chart-container {
+            .chart-container {
                 height: 450px;
             }
         }
-    .nav-link {
+
+        .nav-link {
             transition: color 0.3s ease;
         }
-    .nav-link.active,.nav-link:hover {
+
+        .nav-link.active,
+        .nav-link:hover {
             color: #0d9488;
         }
-    .phase-content {
+
+        .phase-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
             padding: 0 1.5rem;
         }
-    .phase-content.open {
-            max-height: 500px; /* Adjust as needed for content */
+
+        .phase-content.open {
+            max-height: 500px;
+            /* Adjust as needed for content */
             padding: 1.5rem 1.5rem;
         }
-    .slider-thumb::-webkit-slider-thumb {
+
+        .slider-thumb::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
             width: 20px;
@@ -51,14 +62,16 @@
             cursor: pointer;
             border-radius: 50%;
         }
-    .slider-thumb::-moz-range-thumb {
+
+        .slider-thumb::-moz-range-thumb {
             width: 20px;
             height: 20px;
             background: #0d9488;
             cursor: pointer;
             border-radius: 50%;
         }
-    .code-block {
+
+        .code-block {
             background-color: #1e293b;
             color: #e2e8f0;
             padding: 1rem;
@@ -67,6 +80,7 @@
             font-size: 0.875rem;
             overflow-x: auto;
         }
+
         .tooltip {
             position: absolute;
             bottom: 100%;
@@ -86,11 +100,13 @@
             font-size: 0.75rem;
             line-height: 1.25;
         }
+
         .has-tooltip:hover .tooltip {
             opacity: 1;
         }
     </style>
 </head>
+
 <body class="antialiased">
 
     <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
@@ -101,13 +117,20 @@
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#summary" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Summary</a>
-                        <a href="#roadmap" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Roadmap</a>
-                        <a href="#costs" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Cost Engine</a>
-                        <a href="#database-analysis" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Database Costs</a>
-                        <a href="#strategy" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Strategy</a>
-                        <a href="#integration" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Integration</a>
-                        <a href="#budget" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Budget</a>
+                        <a href="#summary"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Summary</a>
+                        <a href="#roadmap"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Roadmap</a>
+                        <a href="#costs" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Cost
+                            Engine</a>
+                        <a href="#database-analysis"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Database Costs</a>
+                        <a href="#strategy"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Strategy</a>
+                        <a href="#integration"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Integration</a>
+                        <a href="#budget"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Budget</a>
                     </div>
                 </div>
             </div>
@@ -115,17 +138,20 @@
     </header>
 
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        
+
         <section id="summary" class="mb-16 scroll-mt-24">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Strategic & Financial Analysis</h2>
-                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">An interactive guide to the costs and strategy for implementing an LLM-powered chatbot for student engagement.</p>
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Strategic & Financial Analysis
+                </h2>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">An interactive guide to the costs and
+                    strategy for implementing an LLM-powered chatbot for student engagement.</p>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                 <div class="bg-white p-6 rounded-xl shadow-md">
                     <dt class="text-sm font-medium text-slate-500">Core Recommendation</dt>
-                    <dd class="mt-1 text-2xl font-semibold tracking-tight text-teal-600">Pilot with GPT-4o-mini & RAG</dd>
+                    <dd class="mt-1 text-2xl font-semibold tracking-tight text-teal-600">Pilot with GPT-4o-mini & RAG
+                    </dd>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-md">
                     <dt class="text-sm font-medium text-slate-500">Total Development Effort</dt>
@@ -138,14 +164,21 @@
             </div>
             <div class="mt-8 bg-teal-50 border-l-4 border-teal-500 text-teal-800 p-6 rounded-lg shadow-sm">
                 <h3 class="font-bold mb-2">Executive Summary</h3>
-                <p class="text-sm md:text-base">This analysis confirms the financial viability of launching an LLM chatbot. Recent market shifts have made powerful models incredibly affordable, reducing projected operational costs by over 90%. The recommended "start smart, scale smart" approach leverages a commercial API and a Retrieval-Augmented Generation (RAG) architecture. This strategy maximizes accuracy and minimizes costs, making the project a low-risk, high-impact strategic investment in student engagement.</p>
+                <p class="text-sm md:text-base">This analysis confirms the financial viability of launching an LLM
+                    chatbot. Recent market shifts have made powerful models incredibly affordable, reducing projected
+                    operational costs by over 90%. The recommended "start smart, scale smart" approach leverages a
+                    commercial API and a Retrieval-Augmented Generation (RAG) architecture. This strategy maximizes
+                    accuracy and minimizes costs, making the project a low-risk, high-impact strategic investment in
+                    student engagement.</p>
             </div>
         </section>
 
         <section id="roadmap" class="mb-16 scroll-mt-24">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Project Roadmap & Team</h2>
-                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">The project is not about building an LLM, but integrating one. Below is the phase-by-phase development lifecycle and the lean team required to execute it.</p>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">The project is not about building an
+                    LLM, but integrating one. Below is the phase-by-phase development lifecycle and the lean team
+                    required to execute it.</p>
             </div>
 
             <div class="bg-white rounded-xl shadow-md p-6 md:p-8 mb-12">
@@ -164,24 +197,33 @@
         <section id="costs" class="mb-16 scroll-mt-24">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">The Cost Engine</h2>
-                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Operational API costs are the primary recurring expense. Use this interactive calculator to explore how different models and usage scenarios impact your monthly budget. The results are based on the latest market pricing.</p>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Operational API costs are the primary
+                    recurring expense. Use this interactive calculator to explore how different models and usage
+                    scenarios impact your monthly budget. The results are based on the latest market pricing.</p>
             </div>
 
             <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-1 space-y-6">
                         <div>
-                            <label for="model-select" class="block text-sm font-medium text-slate-700">Select LLM Model</label>
-                            <select id="model-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md">
+                            <label for="model-select" class="block text-sm font-medium text-slate-700">Select LLM
+                                Model</label>
+                            <select id="model-select"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md">
                             </select>
                         </div>
                         <div>
-                            <label for="visitor-slider" class="block text-sm font-medium text-slate-700">Daily Website Visits: <span id="visitor-value" class="font-bold text-teal-600">500</span></label>
-                            <input id="visitor-slider" type="range" min="100" max="5000" value="500" step="100" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer slider-thumb">
+                            <label for="visitor-slider" class="block text-sm font-medium text-slate-700">Daily Website
+                                Visits: <span id="visitor-value" class="font-bold text-teal-600">500</span></label>
+                            <input id="visitor-slider" type="range" min="100" max="5000" value="500" step="100"
+                                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer slider-thumb">
                         </div>
                         <div>
-                            <label for="engagement-slider" class="block text-sm font-medium text-slate-700">Chatbot Engagement Rate: <span id="engagement-value" class="font-bold text-teal-600">40%</span></label>
-                            <input id="engagement-slider" type="range" min="5" max="100" value="40" step="5" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer slider-thumb">
+                            <label for="engagement-slider" class="block text-sm font-medium text-slate-700">Chatbot
+                                Engagement Rate: <span id="engagement-value"
+                                    class="font-bold text-teal-600">40%</span></label>
+                            <input id="engagement-slider" type="range" min="5" max="100" value="40" step="5"
+                                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer slider-thumb">
                         </div>
                         <div class="bg-slate-50 p-4 rounded-lg text-center">
                             <p class="text-sm text-slate-600">Projected Monthly API Cost</p>
@@ -196,27 +238,38 @@
                 </div>
             </div>
         </section>
-        
+
         <section id="database-analysis" class="mb-16 scroll-mt-24">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Interactive Vector Database Cost Analysis</h2>
-                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Use the slider to model costs for different knowledge base sizes. The analysis shows how costs scale beyond free tiers into standard paid plans.</p>
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Interactive Vector Database
+                    Cost Analysis</h2>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Use the slider to model costs for
+                    different knowledge base sizes. The analysis shows how costs scale beyond free tiers into standard
+                    paid plans.</p>
                 <!-- NEW LINK TO VECTORDB.HTML -->
                 <p class="mt-6">
-                    <a href="vectorDB.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                    <a href="vectorDB.html" target="_blank"
+                        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
                         Learn More: What is a Vector Database?
-                        <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                            <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                            fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                                d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd" />
+                            <path fill-rule="evenodd"
+                                d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd" />
                         </svg>
                     </a>
                 </p>
             </div>
             <div class="bg-white rounded-xl shadow-md p-6 md:p-8 space-y-8">
-                
+
                 <div>
-                    <label for="db-size-slider" class="block text-sm font-medium text-slate-700 mb-2">Knowledge Base Size: <span id="db-size-value" class="font-bold text-teal-600">5</span> GB</label>
-                    <input id="db-size-slider" type="range" min="1" max="50" value="5" step="1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer slider-thumb">
+                    <label for="db-size-slider" class="block text-sm font-medium text-slate-700 mb-2">Knowledge Base
+                        Size: <span id="db-size-value" class="font-bold text-teal-600">5</span> GB</label>
+                    <input id="db-size-slider" type="range" min="1" max="50" value="5" step="1"
+                        class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer slider-thumb">
                 </div>
 
                 <div>
@@ -225,22 +278,31 @@
                         <table class="min-w-full divide-y divide-slate-200">
                             <thead class="bg-slate-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">Select</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Provider</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Est. Annual Cost</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Key Cost Justification</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                        Select</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                        Provider</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                        Est. Annual Cost</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                        Key Cost Justification</th>
                                 </tr>
                             </thead>
                             <tbody id="db-cost-table" class="bg-white divide-y divide-slate-200 text-sm">
-                                </tbody>
+                            </tbody>
                         </table>
                     </div>
                 </div>
 
                 <div>
                     <h3 class="text-xl font-bold text-slate-800 mb-4">Strategic Recommendation</h3>
-                     <div id="db-recommendation" class="bg-teal-50 border-l-4 border-teal-500 text-teal-800 p-6 rounded-lg shadow-sm">
-                        </div>
+                    <div id="db-recommendation"
+                        class="bg-teal-50 border-l-4 border-teal-500 text-teal-800 p-6 rounded-lg shadow-sm">
+                    </div>
                 </div>
 
             </div>
@@ -248,46 +310,57 @@
 
         <section id="strategy" class="mb-16 scroll-mt-24">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">The Core Strategic Decision</h2>
-                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">To ensure accuracy and relevance, the LLM needs your institution's specific knowledge. The choice between RAG and Fine-Tuning is critical for cost, accuracy, and long-term agility.</p>
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">The Core Strategic Decision
+                </h2>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">To ensure accuracy and relevance, the
+                    LLM needs your institution's specific knowledge. The choice between RAG and Fine-Tuning is critical
+                    for cost, accuracy, and long-term agility.</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div class="bg-white border-2 border-teal-500 rounded-xl shadow-lg p-6">
                     <h3 class="text-2xl font-bold text-slate-900 mb-4">Retrieval-Augmented Generation (RAG)</h3>
                     <p class="text-sm text-teal-600 font-semibold mb-4">RECOMMENDED STRATEGY</p>
-                    <p class="mb-6 text-slate-600">Provides the LLM with relevant information "just-in-time" from your knowledge base to answer questions. It doesn't retrain the model, it informs it.</p>
+                    <p class="mb-6 text-slate-600">Provides the LLM with relevant information "just-in-time" from your
+                        knowledge base to answer questions. It doesn't retrain the model, it informs it.</p>
                     <ul class="space-y-4">
                         <li class="flex items-start">
                             <span class="text-green-500 text-2xl mr-3">&#10003;</span>
-                            <div><strong class="text-slate-800">High Accuracy:</strong> Responses are grounded in your official documents, minimizing factual errors or "hallucinations."</div>
-                        </li>
-                        <li class="flex items-start">
-                             <span class="text-green-500 text-2xl mr-3">&#10003;</span>
-                            <div><strong class="text-slate-800">Cost-Effective:</strong> Avoids expensive training runs. You only pay for standard API calls.</div>
+                            <div><strong class="text-slate-800">High Accuracy:</strong> Responses are grounded in your
+                                official documents, minimizing factual errors or "hallucinations."</div>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-500 text-2xl mr-3">&#10003;</span>
-                            <div><strong class="text-slate-800">Agile & Maintainable:</strong> Updating the chatbot's knowledge is as simple as editing a source document. Fast, easy, and free.</div>
+                            <div><strong class="text-slate-800">Cost-Effective:</strong> Avoids expensive training runs.
+                                You only pay for standard API calls.</div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 text-2xl mr-3">&#10003;</span>
+                            <div><strong class="text-slate-800">Agile & Maintainable:</strong> Updating the chatbot's
+                                knowledge is as simple as editing a source document. Fast, easy, and free.</div>
                         </li>
                     </ul>
                 </div>
                 <div class="bg-white rounded-xl shadow-md p-6 opacity-70">
-                     <h3 class="text-2xl font-bold text-slate-900 mb-4">Model Fine-Tuning</h3>
-                     <p class="text-sm text-amber-600 font-semibold mb-4">HIGHER COST & COMPLEXITY</p>
-                     <p class="mb-6 text-slate-600">Permanently retrains the base LLM on a custom dataset of your institution's Q&A pairs, creating a specialized model variant.</p>
-                     <ul class="space-y-4">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4">Model Fine-Tuning</h3>
+                    <p class="text-sm text-amber-600 font-semibold mb-4">HIGHER COST & COMPLEXITY</p>
+                    <p class="mb-6 text-slate-600">Permanently retrains the base LLM on a custom dataset of your
+                        institution's Q&A pairs, creating a specialized model variant.</p>
+                    <ul class="space-y-4">
                         <li class="flex items-start">
                             <span class="text-red-500 text-2xl mr-3">&#10007;</span>
-                            <div><strong class="text-slate-800">High Upfront Cost:</strong> Requires extensive data preparation and expensive computational training runs (thousands of dollars).</div>
+                            <div><strong class="text-slate-800">High Upfront Cost:</strong> Requires extensive data
+                                preparation and expensive computational training runs (thousands of dollars).</div>
                         </li>
                         <li class="flex items-start">
-                           <span class="text-red-500 text-2xl mr-3">&#10007;</span>
-                            <div><strong class="text-slate-800">Higher Operational Cost:</strong> API calls to custom-tuned models are more expensive than base models.</div>
-                        </li>
-                         <li class="flex items-start">
                             <span class="text-red-500 text-2xl mr-3">&#10007;</span>
-                            <div><strong class="text-slate-800">Slow to Update:</strong> The model is a static snapshot. Updating it requires repeating the entire costly and slow fine-tuning process.</div>
+                            <div><strong class="text-slate-800">Higher Operational Cost:</strong> API calls to
+                                custom-tuned models are more expensive than base models.</div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-red-500 text-2xl mr-3">&#10007;</span>
+                            <div><strong class="text-slate-800">Slow to Update:</strong> The model is a static snapshot.
+                                Updating it requires repeating the entire costly and slow fine-tuning process.</div>
                         </li>
                     </ul>
                 </div>
@@ -297,13 +370,17 @@
         <section id="integration" class="mb-16 scroll-mt-24">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Integration Strategy</h2>
-                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">A future-proof "decoupled" architecture makes integration into AEM and migration to WordPress simple and efficient.</p>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">A future-proof "decoupled"
+                    architecture makes integration into AEM and migration to WordPress simple and efficient.</p>
             </div>
             <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
                 <h3 class="text-xl font-bold text-center mb-4">Decoupled Architecture Overview</h3>
-                <p class="text-center text-slate-600 max-w-2xl mx-auto mb-8">The core principle is that your website (AEM/WordPress) is separate from the chatbot's "brain." The website displays a simple chat widget, which communicates with a standalone chatbot service. This makes the chatbot portable and easy to maintain.</p>
+                <p class="text-center text-slate-600 max-w-2xl mx-auto mb-8">The core principle is that your website
+                    (AEM/WordPress) is separate from the chatbot's "brain." The website displays a simple chat widget,
+                    which communicates with a standalone chatbot service. This makes the chatbot portable and easy to
+                    maintain.</p>
                 <div class="code-block text-center text-sm leading-6">
-<pre>
+                    <pre>
  USER'S BROWSER
 |
 +------------------+     +--------------------------------+
@@ -323,19 +400,27 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
                             <h4 class="text-lg font-semibold mb-2">Step 1 & 2: Build the Service & Widget</h4>
-                            <p class="text-slate-600 text-sm mb-4">Develop the chatbot back-end service (the "brain") and the front-end chat widget (the "face") as two separate, independent projects. This is the main development effort.</p>
+                            <p class="text-slate-600 text-sm mb-4">Develop the chatbot back-end service (the "brain")
+                                and the front-end chat widget (the "face") as two separate, independent projects. This
+                                is the main development effort.</p>
                         </div>
                         <div>
                             <h4 class="text-lg font-semibold mb-2">Step 3: Integrate into AEM</h4>
-                            <p class="text-slate-600 text-sm mb-4">Create a simple AEM component that adds the following two lines to your page templates, loading the widget.</p>
+                            <p class="text-slate-600 text-sm mb-4">Create a simple AEM component that adds the following
+                                two lines to your page templates, loading the widget.</p>
                             <div class="code-block">
-&lt;div id="chatbot-root"&gt;&lt;/div&gt;
-&lt;script src="https://your-cdn.com/chatbot-widget.js"&gt;&lt;/script&gt;
+                                &lt;div id="chatbot-root"&gt;&lt;/div&gt;
+                                &lt;script src="https://your-cdn.com/chatbot-widget.js"&gt;&lt;/script&gt;
                             </div>
                         </div>
                         <div class="md:col-span-2">
                             <h4 class="text-lg font-semibold mb-2">Step 4: Migrate to WordPress (Future)</h4>
-                            <p class="text-slate-600 text-sm mb-4">This step requires no changes to the chatbot itself. Simply replicate Step 3 in WordPress. The easiest method is to go to <code class="text-xs bg-slate-200 p-1 rounded">Appearance > Theme File Editor</code>, open <code class="text-xs bg-slate-200 p-1 rounded">footer.php</code>, and paste the same two lines of code from the AEM component before the closing <code class="text-xs bg-slate-200 p-1 rounded">&lt;/body&gt;</code> tag.</p>
+                            <p class="text-slate-600 text-sm mb-4">This step requires no changes to the chatbot itself.
+                                Simply replicate Step 3 in WordPress. The easiest method is to go to <code
+                                    class="text-xs bg-slate-200 p-1 rounded">Appearance > Theme File Editor</code>, open
+                                <code class="text-xs bg-slate-200 p-1 rounded">footer.php</code>, and paste the same two
+                                lines of code from the AEM component before the closing <code
+                                    class="text-xs bg-slate-200 p-1 rounded">&lt;/body&gt;</code> tag.</p>
                         </div>
                     </div>
                 </div>
@@ -345,7 +430,9 @@
         <section id="budget" class="scroll-mt-24">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">First-Year Budget Outlook</h2>
-                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">This summary consolidates the total estimated investment for the first year, combining one-time development with recurring operational costs.</p>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">This summary consolidates the total
+                    estimated investment for the first year, combining one-time development with recurring operational
+                    costs.</p>
             </div>
             <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -357,10 +444,13 @@
                                     Blended Hourly Rate for Development ($)
                                     <span class="relative inline-block align-middle has-tooltip ml-1">
                                         <span class="font-bold text-teal-600">(?)</span>
-                                        <span class="tooltip">This is an average hourly cost across all specialists (engineers, developers, analysts). Adjust this single rate to model different labor cost scenarios for the project.</span>
+                                        <span class="tooltip">This is an average hourly cost across all specialists
+                                            (engineers, developers, analysts). Adjust this single rate to model
+                                            different labor cost scenarios for the project.</span>
                                     </span>
                                 </label>
-                                <input type="number" id="dev-rate-input" value="75" class="mt-1 block w-full max-w-xs pl-3 pr-3 py-2 text-base border-slate-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md">
+                                <input type="number" id="dev-rate-input" value="75"
+                                    class="mt-1 block w-full max-w-xs pl-3 pr-3 py-2 text-base border-slate-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md">
                             </div>
                             <dl class="space-y-2 text-sm">
                                 <div class="flex justify-between">
@@ -377,7 +467,8 @@
                                 </div>
                                 <div class="flex justify-between border-t pt-2 mt-2">
                                     <dt class="text-base font-bold text-slate-900">Total Estimated First-Year Cost</dt>
-                                    <dd id="total-cost-first-year" class="text-base font-bold text-teal-600">$31,872</dd>
+                                    <dd id="total-cost-first-year" class="text-base font-bold text-teal-600">$31,872
+                                    </dd>
                                 </div>
                             </dl>
                         </div>
@@ -397,7 +488,7 @@
                 console.error('Chart.js failed to load');
                 return;
             }
-            
+
             let manuallySelectedProvider = null;
 
             const timelineData = [
@@ -436,7 +527,7 @@
                     </div>`;
                 timelineContainer.appendChild(phaseElement);
             });
-            
+
             timelineContainer.addEventListener('click', (e) => {
                 const header = e.target.closest('.phase-header');
                 if (header) {
@@ -455,7 +546,7 @@
                     <p class="text-xs text-slate-500 mt-1">${member.description}</p>`;
                 teamContainer.appendChild(card);
             });
-            
+
             const modelSelect = document.getElementById('model-select');
             Object.keys(models).forEach(key => {
                 const option = document.createElement('option');
@@ -497,24 +588,26 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: { y: { beginAtZero: true, title: { display: true, text: 'Cost in USD ($)' } } },
-                    plugins: { legend: { display: false }, tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) { label += ': '; }
-                                if (context.parsed.y !== null) {
-                                    label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                    plugins: {
+                        legend: { display: false }, tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                                    }
+                                    return label;
                                 }
-                                return label;
                             }
                         }
-                    } }
+                    }
                 }
             });
 
             const budgetChartCtx = document.getElementById('budget-chart').getContext('2d');
             let budgetChart = new Chart(budgetChartCtx, {
-                   type: 'doughnut',
+                type: 'doughnut',
                 data: {
                     labels: ['Development', 'API Usage', 'Infrastructure'],
                     datasets: [{
@@ -530,7 +623,7 @@
                         legend: { position: 'top' },
                         tooltip: {
                             callbacks: {
-                                label: function(context) {
+                                label: function (context) {
                                     let label = context.label || '';
                                     if (label) { label += ': '; }
                                     if (context.parsed !== null) {
@@ -549,11 +642,11 @@
                 const model = models[selectedModelKey];
                 const dailyVisits = parseInt(visitorSlider.value);
                 const engagementRate = parseInt(engagementSlider.value) / 100;
-                
+
                 const dailyQueries = dailyVisits * engagementRate;
                 const tokensPerQuery = 2000;
                 const monthlyTokens = dailyQueries * tokensPerQuery * 30;
-                
+
                 const inputTokenRatio = 0.25;  // 25% input tokens
                 const outputTokenRatio = 0.75; // 75% output tokens
 
@@ -579,7 +672,7 @@
                     labels.push(model.name.split(' ').slice(1).join(' ')); // Shorten label for chart
                     data.push(cost);
                 });
-                
+
                 costChart.data.labels = labels;
                 costChart.data.datasets[0].data = data;
                 costChart.update();
@@ -638,14 +731,14 @@
                     }
                     return { name: p.name, ...result };
                 });
-                
+
                 const providerToSelect = manuallySelectedProvider || bestProvider;
 
                 dbCostTable.innerHTML = '';
                 costData.forEach(data => {
                     const row = document.createElement('tr');
                     const isSelected = data.name === providerToSelect;
-                    
+
                     if (isSelected) {
                         row.className = 'bg-teal-50'; // Highlight selected row
                     }
@@ -660,7 +753,7 @@
                     `;
                     dbCostTable.appendChild(row);
                 });
-                
+
                 dbRecommendation.innerHTML = `<h4 class="font-bold mb-2">Recommendation for ${size}GB</h4><p class="text-sm md:text-base">At this scale, <strong>${bestProvider}</strong> is the most cost-effective option. You have currently selected <strong>${providerToSelect}</strong> for budget calculation. The optimal choice depends on the trade-offs between pure cost, ecosystem alignment, and specific feature requirements.</p>`;
 
                 updateBudget();
@@ -673,9 +766,9 @@
                 const size = parseInt(dbSizeSlider.value);
                 const providers = [
                     { name: 'Pinecone', calculate: (gb) => Math.max(50, gb * 0.33) * 12 },
-                    { name: 'Qdrant', calculate: (gb) => (gb <= 1)? 0 : (25 + (gb - 1) * 8) * 12 },
+                    { name: 'Qdrant', calculate: (gb) => (gb <= 1) ? 0 : (25 + (gb - 1) * 8) * 12 },
                     { name: 'Weaviate', calculate: (gb) => Math.max(25, (gb * 2000) * 0.095) * 12 },
-                    { name: 'Azure AI Search', calculate: (gb) => (gb <= 15)? 74 * 12 : (gb <= 160)? 246 * 12 : 981 * 12 },
+                    { name: 'Azure AI Search', calculate: (gb) => (gb <= 15) ? 74 * 12 : (gb <= 160) ? 246 * 12 : 981 * 12 },
                     { name: 'Vertex AI Vector Search', calculate: (gb) => (68 + (gb * 1.5)) * 12 }
                 ];
 
@@ -686,15 +779,15 @@
             function updateBudget() {
                 const devRate = parseFloat(devRateInput.value) || 0;
                 const devCost = 410 * devRate;
-                const apiCost = parseFloat(apiCostAnnual.textContent.replace(/[^0-9.-]+/g,""));
+                const apiCost = parseFloat(apiCostAnnual.textContent.replace(/[^0-9.-]+/g, ""));
                 const dbCost = getSelectedDbCost();
                 const hostingCost = 450; // Example annual hosting cost
                 const infraCost = dbCost + hostingCost;
 
-                devCostTotal.textContent = `$${devCost.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
-                infraCostAnnual.textContent = `~$${Math.round(infraCost).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})} (Est.)`;
+                devCostTotal.textContent = `$${devCost.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+                infraCostAnnual.textContent = `~$${Math.round(infraCost).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} (Est.)`;
                 const totalCost = devCost + apiCost + infraCost;
-                totalCostFirstYear.textContent = `$${Math.round(totalCost).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+                totalCostFirstYear.textContent = `$${Math.round(totalCost).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 
                 budgetChart.data.datasets[0].data = [devCost, apiCost, infraCost];
                 budgetChart.update();
@@ -709,10 +802,10 @@
                 engagementValue.textContent = `${engagementSlider.value}%`;
                 calculateApiCosts();
             });
-            
+
             modelSelect.addEventListener('change', calculateApiCosts);
             devRateInput.addEventListener('input', updateBudget);
-            
+
             dbSizeSlider.addEventListener('input', () => {
                 manuallySelectedProvider = null; // Reset selection when slider changes
                 calculateDatabaseCosts();
@@ -724,7 +817,7 @@
                     calculateDatabaseCosts(); // Rerun to update highlighting and recommendation
                 }
             });
-            
+
             // Smooth scrolling for navigation
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('main section');
@@ -734,7 +827,7 @@
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
                     // Adjust offset to trigger active state slightly before section reaches top
-                    if (window.pageYOffset >= sectionTop - 80) { 
+                    if (window.pageYOffset >= sectionTop - 80) {
                         current = section.getAttribute('id');
                     }
                 });
@@ -752,4 +845,5 @@
         });
     </script>
 </body>
+
 </html>
