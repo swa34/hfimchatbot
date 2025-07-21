@@ -1,0 +1,35 @@
+<svg width="400" height="200" viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="200" fill="#F0F8FF"/>
+
+<!-- Improved Photo Camera Icon -->
+<rect x="45" y="70" width="70" height="60" rx="8" fill="#007bff"/>
+<circle cx="80" cy="100" r="20" fill="#eaf6ff" stroke="#0056b3" stroke-width="2"/>
+<circle cx="80" cy="100" r="8" fill="#0056b3"/>
+<rect x="95" y="60" width="15" height="10" rx="2" fill="#007bff"/>
+<path d="M100 70L110 60H90L100 70Z" fill="#007bff"/>
+
+<!-- Improved Musical Note Icon -->
+<path d="M190 60L190 120C184.477 120 180 124.477 180 130C180 135.523 184.477 140 190 140C195.523 140 200 135.523 200 130V70H220V60H190Z" fill="#14b8a6"/>
+<circle cx="190" cy="130" r="10" fill="#14b8a6" stroke="#0f766e" stroke-width="2"/>
+<path d="M220 60L220 100L200 100L200 60Z" fill="#14b8a6"/>
+
+
+<!-- Improved Text Document Icon -->
+<rect x="240" y="60" width="80" height="80" rx="8" fill="#99f6e4" stroke="#0f766e" stroke-width="2"/>
+<rect x="255" y="75" width="50" height="6" rx="1" fill="#0f766e"/>
+<rect x="255" y="87" width="40" height="6" rx="1" fill="#0f766e"/>
+<rect x="255" y="99" width="50" height="6" rx="1" fill="#0f766e"/>
+<rect x="255" y="111" width="30" height="6" rx="1" fill="#0f766e"/>
+<rect x="255" y="123" width="45" height="6" rx="1" fill="#0f766e"/>
+
+<!-- Improved Video Play Button Icon -->
+<rect x="100" y="120" width="60" height="40" rx="5" fill="#ffc107" stroke="#e0a800" stroke-width="2"/>
+<path d="M125 130L145 140L125 150V130Z" fill="#ffffff"/>
+
+<!-- Improved Microphone Icon -->
+<rect x="330" y="70" width="20" height="60" rx="5" fill="#6c757d" stroke="#495057" stroke-width="2"/>
+<path d="M340 60C340 54.4772 335.523 50 330 50H350C355.523 50 360 54.4772 360 60V70H330V60Z" fill="#6c757d" stroke="#495057" stroke-width="2"/>
+<circle cx="340" cy="135" r="10" fill="#495057"/>
+<rect x="335" y="140" width="10" height="20" fill="#495057"/>
+
+</svg>
