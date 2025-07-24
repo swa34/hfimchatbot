@@ -746,6 +746,26 @@
                 updateBudget();
             }
 
+            function linkifyAndMarkdown(text) {
+                if (!text) return '';
+                // Markdown links: [text](https://example.com)
+                const md = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
+                let html = text.replace(
+                    md,
+                    '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-teal-600 underline break-words">$1</a>'
+                );
+
+                // Bare URLs: https://example.com
+                const urlRegex = /(https?:\/\/[^\s)]+)(?=\)|\s|$)/g;
+                html = html.replace(
+                    urlRegex,
+                    url => `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-teal-600 underline break-words">${url}</a>`
+                );
+
+                return html;
+            }
+
+
             function updateCostChart(dailyVisits, engagementRate) {
                 const labels = [];
                 const data = [];
@@ -935,25 +955,44 @@
             function addMsg(text, cls) {
                 const div = document.createElement('div');
                 div.className = 'hfim-msg ' + cls;
-                div.textContent = text;
+                div.innerHTML = linkifyAndMarkdown(text); // <= was textContent
                 msgs.appendChild(div);
                 msgs.scrollTop = msgs.scrollHeight;
             }
 
+
             function addSources(sources) {
                 if (!sources || !sources.length) return;
+
+                // dedupe by filename
+                const seen = new Set();
+                const unique = [];
+                for (const s of sources) {
+                    if (s && s.source && !seen.has(s.source)) {
+                        seen.add(s.source);
+                        unique.push(s);
+                    }
+                }
+
+                const details = document.createElement('details');
+                details.className = 'hfim-msg bot';
+                const summary = document.createElement('summary');
+                summary.textContent = 'Show sources';
+                details.appendChild(summary);
+
                 const ul = document.createElement('ul');
-                sources.forEach(s => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<strong>${s.source}</strong> (score: ${s.score.toFixed(3)})`;
-                    ul.appendChild(li);
+                ul.style.marginLeft = '1rem';
+
+                unique.slice(0, 3).forEach(s => {
+                    // if you later store a proper URL in metadata, make it clickable too
+                    ul.innerHTML += `<li><strong>${s.source}</strong>${s.score ? ` (score: ${s.score.toFixed(3)})` : ''}</li>`;
                 });
-                const div = document.createElement('div');
-                div.className = 'hfim-msg bot';
-                div.appendChild(ul);
-                msgs.appendChild(div);
+
+                details.appendChild(ul);
+                msgs.appendChild(details);
                 msgs.scrollTop = msgs.scrollHeight;
             }
+
 
             async function sendMessage() {
                 const text = input.value.trim();
