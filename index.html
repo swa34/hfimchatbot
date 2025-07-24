@@ -964,16 +964,6 @@
             function addSources(sources) {
                 if (!sources || !sources.length) return;
 
-                // dedupe by filename
-                const seen = new Set();
-                const unique = [];
-                for (const s of sources) {
-                    if (s && s.source && !seen.has(s.source)) {
-                        seen.add(s.source);
-                        unique.push(s);
-                    }
-                }
-
                 const details = document.createElement('details');
                 details.className = 'hfim-msg bot';
                 const summary = document.createElement('summary');
@@ -983,15 +973,21 @@
                 const ul = document.createElement('ul');
                 ul.style.marginLeft = '1rem';
 
-                unique.slice(0, 3).forEach(s => {
-                    // if you later store a proper URL in metadata, make it clickable too
-                    ul.innerHTML += `<li><strong>${s.source}</strong>${s.score ? ` (score: ${s.score.toFixed(3)})` : ''}</li>`;
+                sources.forEach(s => {
+                    const li = document.createElement('li');
+                    if (s.url) {
+                        li.innerHTML = `<a href="${s.url}" target="_blank" rel="noopener noreferrer" class="text-teal-600 underline break-words">${s.url}</a>`;
+                    } else {
+                        li.textContent = s.sourceFile || 'Unknown source';
+                    }
+                    ul.appendChild(li);
                 });
 
                 details.appendChild(ul);
                 msgs.appendChild(details);
                 msgs.scrollTop = msgs.scrollHeight;
             }
+
 
 
             async function sendMessage() {
