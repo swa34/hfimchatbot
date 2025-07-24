@@ -7,6 +7,13 @@
     <title>Interactive LLM API Cost Analysis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+    <!-- Chat backend config -->
+    <script>
+        window.API_URL = "https://mines-fireplace-body-emily.trycloudflare.com/chat"; // change if tunnel changes
+        window.API_KEY = "super-secret"; // must match CHATBOT_API_KEY in your Node server .env
+    </script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -104,6 +111,43 @@
         .has-tooltip:hover .tooltip {
             opacity: 1;
         }
+
+        /* Chat styles */
+        #hfim-box {
+            border: 1px solid #cbd5e1;
+            padding: 10px;
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        #hfim-msgs {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            padding: 6px;
+            margin-bottom: 8px;
+            background: #f8fafc;
+            border-radius: 0.375rem;
+        }
+
+        .hfim-msg {
+            margin: 8px 0;
+            white-space: pre-wrap;
+            font-size: 0.9rem;
+        }
+
+        .hfim-msg.user {
+            text-align: right;
+            color: #334155;
+        }
+
+        .hfim-msg.bot {
+            text-align: left;
+            color: #0f172a;
+        }
     </style>
 </head>
 
@@ -131,6 +175,8 @@
                             class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Integration</a>
                         <a href="#budget"
                             class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-700">Budget</a>
+                        <a href="#chatbot"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-teal-700">Chatbot</a>
                     </div>
                 </div>
             </div>
@@ -434,12 +480,32 @@
                             <h4 class="text-lg font-semibold mb-2">Step 4: Migrate to WordPress (Future)</h4>
                             <p class="text-slate-600 text-sm mb-4">This step requires no changes to the chatbot itself.
                                 Simply replicate Step 3 in WordPress. The easiest method is to go to <code
-                                    class="text-xs bg-slate-200 p-1 rounded">Appearance > Theme File Editor</code>, open
-                                <code class="text-xs bg-slate-200 p-1 rounded">footer.php</code>, and paste the same two
-                                lines of code from the AEM component before the closing <code
-                                    class="text-xs bg-slate-200 p-1 rounded">&lt;/body&gt;</code> tag.
-                            </p>
+                                    class="text-xs bg-slate-200 p-1 rounded">Appearance &gt; Theme File Editor</code>,
+                                open <code class="text-xs bg-slate-200 p-1 rounded">footer.php</code>, and paste the
+                                same two lines of code from the AEM component before the closing <code
+                                    class="text-xs bg-slate-200 p-1 rounded">&lt;/body&gt;</code> tag.</p>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHATBOT SECTION -->
+        <section id="chatbot" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">HFIM Chatbot Demo</h2>
+                <p class="mt-4 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Ask questions about the University of
+                    Georgia Hospitality & Food Industry Management program.</p>
+            </div>
+            <div class="flex justify-center">
+                <div id="hfim-box">
+                    <div id="hfim-msgs"></div>
+                    <div class="flex gap-2">
+                        <input id="hfim-input"
+                            class="flex-1 border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                            placeholder="Ask about HFIM..." />
+                        <button id="hfim-send"
+                            class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-md text-sm">Send</button>
                     </div>
                 </div>
             </div>
@@ -860,6 +926,59 @@
             // Initial calculations on page load
             calculateApiCosts();
             calculateDatabaseCosts();
+
+            // ---------- CHAT WIDGET ----------
+            const msgs = document.getElementById('hfim-msgs');
+            const input = document.getElementById('hfim-input');
+            const sendBtn = document.getElementById('hfim-send');
+
+            function addMsg(text, cls) {
+                const div = document.createElement('div');
+                div.className = 'hfim-msg ' + cls;
+                div.textContent = text;
+                msgs.appendChild(div);
+                msgs.scrollTop = msgs.scrollHeight;
+            }
+
+            function addSources(sources) {
+                if (!sources || !sources.length) return;
+                const ul = document.createElement('ul');
+                sources.forEach(s => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>${s.source}</strong> (score: ${s.score.toFixed(3)})`;
+                    ul.appendChild(li);
+                });
+                const div = document.createElement('div');
+                div.className = 'hfim-msg bot';
+                div.appendChild(ul);
+                msgs.appendChild(div);
+                msgs.scrollTop = msgs.scrollHeight;
+            }
+
+            async function sendMessage() {
+                const text = input.value.trim();
+                if (!text) return;
+                addMsg(text, 'user');
+                input.value = '';
+                try {
+                    const resp = await fetch(window.API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-api-key': window.API_KEY
+                        },
+                        body: JSON.stringify({ message: text })
+                    });
+                    const data = await resp.json();
+                    addMsg(data.answer || 'No answer', 'bot');
+                    addSources(data.sources);
+                } catch (e) {
+                    addMsg('Error: ' + e.message, 'bot');
+                }
+            }
+
+            if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+            if (input) input.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
         });
     </script>
 </body>
