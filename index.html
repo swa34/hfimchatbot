@@ -748,6 +748,24 @@
 
             function linkifyAndMarkdown(text) {
                 if (!text) return '';
+
+                // First, check if the text contains escaped HTML entities
+                // This will convert &lt; back to < and &gt; back to >
+                if (text.includes('&lt;') || text.includes('&gt;') || text.includes('&quot;')) {
+                    text = text
+                        .replace(/&lt;/g, '<')
+                        .replace(/&gt;/g, '>')
+                        .replace(/&quot;/g, '"')
+                        .replace(/&#39;/g, "'")
+                        .replace(/&amp;/g, '&');
+                }
+
+                // If text already contains proper HTML tags after unescaping, return it
+                if (text.includes('<a href=') && text.includes('</a>')) {
+                    return text;
+                }
+
+                // Otherwise, process markdown and URLs as before
                 // Markdown links: [text](https://example.com)
                 const md = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
                 let html = text.replace(
