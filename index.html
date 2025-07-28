@@ -749,43 +749,55 @@
             function linkifyAndMarkdown(text) {
                 if (!text) return '';
 
-                // First, check if the text already contains HTML anchor tags
-                // If it does, just return it as-is (the server already formatted it)
-                if (text.includes('<a href="') && text.includes('</a>')) {
-                    return text;
-                }
-
-                // Check for escaped HTML and unescape it
+                // First, handle any escaped HTML entities
                 if (text.includes('&lt;') || text.includes('&gt;') || text.includes('&quot;')) {
-                    const unescaped = text
+                    text = text
                         .replace(/&lt;/g, '<')
                         .replace(/&gt;/g, '>')
                         .replace(/&quot;/g, '"')
                         .replace(/&#39;/g, "'")
                         .replace(/&amp;/g, '&');
-
-                    // After unescaping, check again if it contains HTML
-                    if (unescaped.includes('<a href="') && unescaped.includes('</a>')) {
-                        return unescaped;
-                    }
-
-                    text = unescaped;
                 }
 
-                // Process markdown links: [text](url)
-                // Updated regex to be more precise about URL boundaries
-                const md = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+                // If text already contains proper HTML tags after unescaping, return it
+                if (text.includes('<a href=') && text.includes('</a>')) {
+                    return text;
+                }
+
+                // Handle markdown links: [text](url)
                 let html = text.replace(
-                    md,
-                    '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-teal-600 underline break-words">$1</a>'
+                    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+                    (match, linkText, url) => {
+                        // Special styling for LinkedIn links
+                        if (url.includes('linkedin.com')) {
+                            return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="linkedin-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display: inline; vertical-align: text-bottom; margin-right: 4px;">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>${linkText}</a>`;
+                        }
+                        return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-teal-600 underline break-words">${linkText}</a>`;
+                    }
                 );
 
-                // Process bare URLs (but not if they're already in anchor tags)
-                // Updated to be more careful about URL boundaries
-                const urlRegex = /(?<![">])(https?:\/\/[^\s<>"]+)(?![">])/g;
+                // Handle bare URLs
                 html = html.replace(
-                    urlRegex,
-                    '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-teal-600 underline break-words">$1</a>'
+                    /(https?:\/\/[^\s<]+)/g,
+                    (match) => {
+                        // Skip if already in a link
+                        if (match.includes('</a>') || match.includes('<a')) return match;
+
+                        // Special handling for LinkedIn URLs
+                        if (match.includes('linkedin.com/in/')) {
+                            const username = match.split('/').pop();
+                            const displayName = username.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                            return `<a href="${match}" target="_blank" rel="noopener noreferrer" class="linkedin-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display: inline; vertical-align: text-bottom; margin-right: 4px;">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>${displayName}</a>`;
+                        }
+
+                        return `<a href="${match}" target="_blank" rel="noopener noreferrer" class="text-teal-600 underline break-words">${match}</a>`;
+                    }
                 );
 
                 return html;
@@ -987,40 +999,87 @@
             }
 
 
-            function addSources(sources) {
-                if (!sources || !sources.length) return;
+            function addSources(sources, linkedInProfiles) {
+                if ((!sources || !sources.length) && (!linkedInProfiles || !linkedInProfiles.length)) return;
 
                 const details = document.createElement('details');
                 details.className = 'hfim-msg bot';
+                details.style.marginTop = '8px';
+
                 const summary = document.createElement('summary');
-                summary.textContent = 'Show sources';
+                summary.style.cursor = 'pointer';
+                summary.style.fontWeight = '500';
+                summary.textContent = linkedInProfiles?.length ?
+                    `Show sources & ${linkedInProfiles.length} LinkedIn profiles` :
+                    'Show sources';
                 details.appendChild(summary);
 
-                const ul = document.createElement('ul');
-                ul.style.marginLeft = '1rem';
+                const content = document.createElement('div');
+                content.style.marginTop = '8px';
 
-                sources.forEach(s => {
-                    const li = document.createElement('li');
-                    if (s.url) {
-                        li.innerHTML = `<a href="${s.url}" target="_blank" rel="noopener noreferrer" class="text-teal-600 underline break-words">${s.url}</a>`;
-                    } else {
-                        li.textContent = s.sourceFile || 'Unknown source';
-                    }
-                    ul.appendChild(li);
-                });
+                // Add LinkedIn profiles if available
+                if (linkedInProfiles && linkedInProfiles.length > 0) {
+                    const profileSection = document.createElement('div');
+                    profileSection.innerHTML = '<strong>LinkedIn Profiles Found:</strong>';
+                    profileSection.style.marginBottom = '8px';
 
-                details.appendChild(ul);
+                    const profileList = document.createElement('ul');
+                    profileList.style.marginLeft = '1rem';
+                    profileList.style.listStyleType = 'none';
+
+                    linkedInProfiles.forEach(profile => {
+                        const li = document.createElement('li');
+                        li.style.marginBottom = '4px';
+                        li.innerHTML = `
+                <a href="${profile.url}" target="_blank" rel="noopener noreferrer" class="linkedin-link" style="display: inline-flex; align-items: center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#0077B5" style="margin-right: 8px;">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                    ${profile.text || profile.url.split('/').pop().replace(/-/g, ' ')}
+                </a>`;
+                        profileList.appendChild(li);
+                    });
+
+                    profileSection.appendChild(profileList);
+                    content.appendChild(profileSection);
+                }
+
+                // Add regular sources
+                if (sources && sources.length > 0) {
+                    const sourceSection = document.createElement('div');
+                    sourceSection.innerHTML = '<strong>Sources:</strong>';
+
+                    const ul = document.createElement('ul');
+                    ul.style.marginLeft = '1rem';
+
+                    sources.forEach(s => {
+                        const li = document.createElement('li');
+                        if (s.url) {
+                            li.innerHTML = `<a href="${s.url}" target="_blank" rel="noopener noreferrer" class="text-teal-600 underline break-words">${s.url}</a>`;
+                            if (s.hasLinkedIn) {
+                                li.innerHTML += ' <span style="color: #0077B5; font-size: 0.875rem;">(contains LinkedIn profiles)</span>';
+                            }
+                        } else {
+                            li.textContent = s.sourceFile || 'Unknown source';
+                        }
+                        ul.appendChild(li);
+                    });
+
+                    sourceSection.appendChild(ul);
+                    content.appendChild(sourceSection);
+                }
+
+                details.appendChild(content);
                 msgs.appendChild(details);
                 msgs.scrollTop = msgs.scrollHeight;
             }
-
-
 
             async function sendMessage() {
                 const text = input.value.trim();
                 if (!text) return;
                 addMsg(text, 'user');
                 input.value = '';
+
                 try {
                     const resp = await fetch(window.API_URL, {
                         method: 'POST',
@@ -1031,15 +1090,35 @@
                         body: JSON.stringify({ message: text })
                     });
                     const data = await resp.json();
+
+                    // Display the answer with properly formatted links
                     addMsg(data.answer || 'No answer', 'bot');
-                    addSources(data.sources);
+
+                    // Display sources and LinkedIn profiles
+                    addSources(data.sources, data.linkedInProfiles);
                 } catch (e) {
                     addMsg('Error: ' + e.message, 'bot');
                 }
             }
+            const style = document.createElement('style');
+            style.textContent = `
+    .linkedin-link {
+        color: #0077B5;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: opacity 0.2s;
+    }
+    .linkedin-link:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+    }
+`;
+            document.head.appendChild(style);
 
             if (sendBtn) sendBtn.addEventListener('click', sendMessage);
             if (input) input.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
+
         });
     </script>
 </body>
