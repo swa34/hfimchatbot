@@ -538,7 +538,7 @@
                             </div>
                             <dl class="space-y-2 text-sm">
                                 <div class="flex justify-between">
-                                    <dt class="text-slate-600">One-Time Dev Cost (~410 hrs)</dt>
+                                    <dt class="text-slate-600">One-Time Dev Cost (~510 hrs)</dt>
                                     <dd id="dev-cost-total" class="font-semibold text-slate-900">$30,750</dd>
                                 </div>
                                 <div class="flex justify-between">
@@ -579,7 +579,7 @@
                 { phase: 1, title: 'Planning & Architecture', hours: 100, content: 'Defining the technical blueprint, selecting the technology stack, and designing the system architecture for security, scalability, and maintainability.' },
                 { phase: 2, title: 'Conversation Design & UX', hours: 100, content: 'Crafting the user experience, defining the chatbot’s persona and tone, and mapping conversational flows to ensure natural, helpful interactions.' },
                 { phase: 3, title: 'API & Integration Dev', hours: 50, content: 'Core back-end engineering to manage interactions with the LLM provider, handle API keys, and build the RAG retrieval pipeline.' },
-                { phase: 4, title: 'Testing & Quality Assurance', hours: 30, content: 'Rigorous unit, integration, and user acceptance testing to ensure reliability, accuracy, and a high-quality user experience.' },
+                { phase: 4, title: 'Testing & Quality Assurance', hours: 100, content: 'Rigorous unit, integration, and user acceptance testing to ensure reliability, accuracy, and a high-quality user experience.' },
                 { phase: 5, title: 'Deployment & Scaling', hours: 30, content: 'Moving the application to a live production environment on a cloud provider, configured for high availability and robust monitoring.' },
                 { phase: 6, title: 'Multi-Channel Integration', hours: 50, content: 'Integrating the chatbot into user-facing channels, primarily a widget on the institution’s website, ensuring seamless cross-browser functionality.' },
             ];
@@ -946,7 +946,7 @@
 
             function updateBudget() {
                 const devRate = parseFloat(devRateInput.value) || 0;
-                const devCost = 410 * devRate;
+                const devCost = 510 * devRate;
                 const apiCost = parseFloat(apiCostAnnual.textContent.replace(/[^0-9.-]+/g, ""));
                 const dbCost = getSelectedDbCost();
                 const hostingCost = 450; // Example annual hosting cost
