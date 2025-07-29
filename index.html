@@ -218,6 +218,40 @@
                 opacity: 1;
             }
         }
+
+        .hfim-msg.bot .bubble {
+            white-space: pre-wrap;
+            /* Preserves line breaks and wraps long lines */
+            text-align: left;
+            /* Ensures left alignment for better readability */
+            line-height: 1.6;
+            /* Better line spacing */
+            font-size: 0.95rem;
+            /* Slightly larger for readability */
+        }
+
+        /* Styling for lists within bot messages */
+        .hfim-msg.bot .bubble ul,
+        .hfim-msg.bot .bubble ol {
+            margin: 0.5em 0;
+            padding-left: 1.5em;
+        }
+
+        .hfim-msg.bot .bubble li {
+            margin: 0.25em 0;
+        }
+
+        /* Make bold text stand out */
+        .hfim-msg.bot .bubble strong {
+            color: #0f766e;
+            font-weight: 600;
+        }
+
+        /* Add some spacing between line breaks */
+        .hfim-msg.bot .bubble br+br {
+            display: block;
+            height: 0.5em;
+        }
     </style>
 </head>
 
