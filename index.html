@@ -131,36 +131,92 @@
             margin-bottom: 8px;
             background: #f8fafc;
             border-radius: 0.375rem;
+            display: flex;
+            flex-direction: column;
+            /* Stack messages vertically */
         }
 
         .hfim-msg {
-            margin: 12px 8px;
-            padding: 10px 15px;
-            border-radius: 18px;
-            max-width: 80%;
-            word-wrap: break-word;
-            font-size: 0.9rem;
-            position: relative;
+            margin: 8px 4px;
+            display: flex;
+            align-items: flex-end;
         }
 
         .hfim-msg.user {
-            background-color: #0d9488;
-            /* Teal background for user */
-            color: white;
-            margin-left: auto;
-            /* Push to right */
-            border-bottom-right-radius: 4px;
-            /* Sharp corner for tail effect */
+            justify-content: flex-end;
+            /* Align to right */
         }
 
         .hfim-msg.bot {
+            justify-content: flex-start;
+            /* Align to left */
+        }
+
+        .hfim-msg .bubble {
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 70%;
+            word-wrap: break-word;
+            font-size: 0.9rem;
+            display: inline-block;
+            /* This makes it fit content */
+        }
+
+        .hfim-msg.user .bubble {
+            background-color: #0d9488;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .hfim-msg.bot .bubble {
             background-color: #f1f5f9;
-            /* Light gray for bot */
             color: #0f172a;
-            margin-right: auto;
-            /* Push to left */
             border-bottom-left-radius: 4px;
-            /* Sharp corner for tail effect */
+        }
+
+        /* Loading spinner styles */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #f1f5f9;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            margin: 8px 4px;
+            align-self: flex-start;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background-color: #94a3b8;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -1042,11 +1098,38 @@
             const sendBtn = document.getElementById('hfim-send');
 
             function addMsg(text, cls) {
-                const div = document.createElement('div');
-                div.className = 'hfim-msg ' + cls;
-                div.innerHTML = linkifyAndMarkdown(text); // <= was textContent
-                msgs.appendChild(div);
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'hfim-msg ' + cls;
+
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.innerHTML = linkifyAndMarkdown(text);
+
+                msgDiv.appendChild(bubble);
+                msgs.appendChild(msgDiv);
                 msgs.scrollTop = msgs.scrollHeight;
+            }
+
+            function showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'typing-indicator';
+                typingDiv.id = 'typing-indicator';
+
+                // Create three dots
+                for (let i = 0; i < 3; i++) {
+                    const dot = document.createElement('span');
+                    typingDiv.appendChild(dot);
+                }
+
+                msgs.appendChild(typingDiv);
+                msgs.scrollTop = msgs.scrollHeight;
+            }
+
+            function hideTypingIndicator() {
+                const indicator = document.getElementById('typing-indicator');
+                if (indicator) {
+                    indicator.remove();
+                }
             }
 
 
@@ -1131,6 +1214,9 @@
                 addMsg(text, 'user');
                 input.value = '';
 
+                // Show typing indicator
+                showTypingIndicator();
+
                 try {
                     const resp = await fetch(window.API_URL, {
                         method: 'POST',
@@ -1142,12 +1228,16 @@
                     });
                     const data = await resp.json();
 
+                    // Hide typing indicator before showing response
+                    hideTypingIndicator();
+
                     // Display the answer with properly formatted links
                     addMsg(data.answer || 'No answer', 'bot');
 
                     // Display sources and LinkedIn profiles
                     addSources(data.sources, data.linkedInProfiles);
                 } catch (e) {
+                    hideTypingIndicator();
                     addMsg('Error: ' + e.message, 'bot');
                 }
             }
